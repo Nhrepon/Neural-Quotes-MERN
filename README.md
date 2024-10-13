@@ -5,7 +5,7 @@ Pinterest clone using Node js, Express js, React js and Mongodb.
 
 
 <div style="text-align: center; margin-top:50px">
-<p>Design and developed by <a href="https://linkedin.com/in/nhrepon"> MD. Nur Hossain Repon</a>.</p>
+<p>Design and developed by <a href="https://linkedin.com/in/nhrepon" target="_blank"> MD. Nur Hossain Repon</a>.</p>
 <p>MERN stack developer.</p>
 </div>
 
