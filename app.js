@@ -5,31 +5,37 @@ const app = new express();
 
 
 // Security middleware import
-//const cors = require("cors");
-//const helmet = require("helmet");
-//const hpp = require("hpp");
-//const xss = require("xss-clean");
-//const mongoSanitize = require("express-mongo-sanitize");
-//const rateLimit = require("express-rate-limit");
-//const cookieParser = require('cookie-parser');
+const cors = require("cors");
+const helmet = require("helmet");
+const hpp = require("hpp");
+const xss = require("xss-clean");
+const mongoSanitize = require("express-mongo-sanitize");
+const rateLimit = require("express-rate-limit");
+const cookieParser = require('cookie-parser');
 
 
 
 // Security middleware implement
-//app.use(cors());
-//app.use(helmet());
-//app.use(hpp());
-//app.use(xss());
-//app.use(mongoSanitize());
-//app.use(cookieParser());
+app.use(cors());
+app.use(helmet());
+app.use(hpp());
+app.use(xss());
+app.use(mongoSanitize());
+app.use(cookieParser());
+
+
+
 
 // Req rate limiting
-// const limiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 30000 });
-// app.use(limiter);
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 30000 });
+app.use(limiter);
 
 // json body parse
 app.use(express.json({ limit: "50mb" }));
 app.use(express.urlencoded({ extended: true }));
+
+
+
 
 // Database connection
 const mongoose = require("mongoose");
@@ -45,10 +51,15 @@ mongoose.connect(url, option).then((res) => {
     console.log(error);
 });
 
+
 // Api router manage
 app.use("/api", router);
 
+
 app.set("etag", false);
+
+
+
 
 // connect front end
 app.use(express.static("client/dist"));
