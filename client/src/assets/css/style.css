@@ -17,15 +17,10 @@ body {
 
 
 
-.gimg{
-  display: grid;
-  grid-auto-columns: 20%;
-  grid-template-rows: auto;
-}
-.gimg img{
-  max-width: 250px;
-  height: auto;
-}
+
+
+
+
 
 
 

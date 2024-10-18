@@ -1,0 +1,32 @@
+.grid-container{
+    columns:4;
+    column-gap: 15px;
+}
+.cards{
+    width: 100%;
+    height: auto;
+    margin-bottom: 15px;
+    break-inside: avoid;
+}
+.cards:hover{
+    box-shadow: black 5px 5px 5px;
+}
+
+
+@media (max-width: 960px) {
+    .grid-container{
+        columns:3;
+    }
+}
+
+@media (max-width: 768px) {
+    .grid-container{
+        columns:2;
+    }
+}
+
+@media (max-width: 480px) {
+    .grid-container{
+        columns:1;
+    }
+}
