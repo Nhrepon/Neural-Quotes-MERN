@@ -52,6 +52,34 @@ mongoose.connect(url, option).then((res) => {
 });
 
 
+
+
+
+const multer = require('multer');
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads')
+    },
+    filename: function (req, file, cb) {
+        cb(null, file.fieldname + '-' + Date.now() + '-' + Math.round(Math.random() * 10000) +'-'+ file.originalname)
+    }
+})
+const upload = multer({ storage: storage });
+
+app.post('/media-upload', upload.array('photos'), function (req, res) {
+    if (req.files) {
+        res.json({message: "file uploaded successfully!"})
+    } else {
+        res.json({ message: "File upload failed!"})
+    }
+});
+
+
+
+
+
+
+
 // Api router manage
 app.use("/api", router);
 

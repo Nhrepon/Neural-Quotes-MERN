@@ -6,6 +6,7 @@ import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap';
 import './assets/css/style.css';
 
+
 createRoot(document.getElementById('root')).render(
   <StrictMode>
       <App />

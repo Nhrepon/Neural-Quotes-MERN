@@ -76,7 +76,7 @@ const ImageGridComponents = () => {
                                         <img className="w-100 rounded-top-2" src={item.url} alt={item.title}/>
                                         <div className="d-flex justify-content-between px-2 mt-2">
                                             <p>{item.title}</p>
-                                            <p><i class="bi bi-suit-heart"></i> {item.love}</p>
+                                            <p><i className="bi bi-suit-heart"></i> {item.love}</p>
                                         </div>
                                     </div>
                                 </>
