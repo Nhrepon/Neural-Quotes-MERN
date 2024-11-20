@@ -6,22 +6,35 @@ const app = new express();
 
 // Security middleware import
 const cors = require("cors");
-const helmet = require("helmet");
 const hpp = require("hpp");
 const xss = require("xss-clean");
 const mongoSanitize = require("express-mongo-sanitize");
 const rateLimit = require("express-rate-limit");
 const cookieParser = require('cookie-parser');
-
+const helmet = require('helmet');
 
 
 // Security middleware implement
 app.use(cors());
-app.use(helmet());
 app.use(hpp());
 app.use(xss());
 app.use(mongoSanitize());
 app.use(cookieParser());
+
+
+
+// Allow img from other src
+app.use(
+    helmet({
+        contentSecurityPolicy: {
+            directives: {
+                defaultSrc: ["'self'"],
+                imgSrc: ["'self'", "https://thereadersea.com/", "data:"],
+            },
+        },
+    }),
+);
+
 
 
 
@@ -50,32 +63,6 @@ mongoose.connect(url, option).then((res) => {
 }).catch((error) => {
     console.log(error);
 });
-
-
-
-
-
-const multer = require('multer');
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads')
-    },
-    filename: function (req, file, cb) {
-        cb(null, file.fieldname + '-' + Date.now() + '-' + Math.round(Math.random() * 10000) +'-'+ file.originalname)
-    }
-})
-const upload = multer({ storage: storage });
-
-app.post('/media-upload', upload.array('photos'), function (req, res) {
-    if (req.files) {
-        res.json({message: "file uploaded successfully!"})
-    } else {
-        res.json({ message: "File upload failed!"})
-    }
-});
-
-
-
 
 
 

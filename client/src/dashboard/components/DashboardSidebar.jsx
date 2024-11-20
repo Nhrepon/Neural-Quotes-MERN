@@ -3,15 +3,6 @@ import {Link} from "react-router-dom";
 
 const DashboardSidebar = () => {
 
-    const item = [
-        {"name":"Inbox", "href":"/media", "class":"bi bi-mailbox m-0 me-sm-2 text-center text-sm-start"},
-        {"name":"Media", "href":"/media", "class":"bi bi-media me-2"},
-        {"name":"Post", "href":"/media", "class":"bi bi-mailbox me-2"},
-        {"name":"Users", "href":"/media", "class":"bi bi-people me-2"},
-    ]
-
-
-
 
     return (
         // <div className="sidebar position-sticky top-0 min-vh-100">
