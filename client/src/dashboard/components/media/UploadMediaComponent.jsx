@@ -1,7 +1,9 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import './style.css';
 import axios from "axios";
 import toast from "react-hot-toast";
+import {DeleteAlert} from "../../../utility/Utility.js";
+import {backendUrl} from "../../../../config.js";
 
 
 const UploadMediaComponent = () => {
@@ -12,10 +14,36 @@ const UploadMediaComponent = () => {
     }
 
 
+    const [imgFile, setImgFile] = useState(null);
+    const loadFile = async ()=>{
+        const res = await axios.get("api/fileLoad");
+        setImgFile(res.data.file);
+    }
+
+    useEffect(() => {
+        (async ()=>{
+            await loadFile();
+        })()
+    }, []);
+
+
     const removeFile = (e)=>{
         setFile(file.filter((item, i)=> i !== e))
     }
 
+    const deleteFile = async (id)=>{
+        if(await DeleteAlert()){
+            const res = await axios.delete(`api/fileDelete/${id}`);
+            if (res.data.status === "success") {
+                await loadFile();
+                toast.success(`${id} deleted successfully!`);
+            }else {
+                toast.error(`${id} deleted failed!`);
+            }
+        }
+
+
+    }
 
     const uploadFile = async ()=>{
         let formData = new FormData();
@@ -26,10 +54,18 @@ const UploadMediaComponent = () => {
 
             try {
                 const res = await axios.post("/api/fileUpload", formData, { headers: { "Content-Type": "multipart/form-data" } });
+                if(res['data'].status === "success"){
+                    //setImgFile(res.data.path);
+                    setFile(null);
+                    await loadFile();
+                    document.getElementById("file").value = "";
+                    toast.success(`File upload success!`);
+                }else {
+                    toast.error(`File upload failed!`);
+                }
 
-                toast.success(`successfully uploaded ${res.data.files[0].destination }/${res.data.files[0].filename} `);
             }catch (e) {
-                toast.error(`error${e}`);
+                toast.error(`error occurred: ${e}`);
             }
         }else {
             toast.error("Please, Select images");
@@ -53,7 +89,7 @@ const UploadMediaComponent = () => {
             <div className="row">
                 <div className="col-4 border-end vh-100">
                     <div className="card shadow-lg p-5 gap-4">
-                        <input className="form-control" type="file" multiple accept="image/*" onChange={handleFileChange} name="file"/>
+                        <input id={"file"} className="form-control" type="file" multiple accept="image/*" onChange={handleFileChange} name="file"/>
                         <button onClick={uploadFile} className="btn btn-success" type="submit">Upload Media</button>
                     </div>
                     <div className="my-4 overflow-hidden" style={{columns:2, columnGap:"15px"}}>
@@ -76,10 +112,19 @@ const UploadMediaComponent = () => {
                 <div className="col-8">
                     <div className="grid-container my-2">
                         {
-                            file?.map((item, i) => {
+                            imgFile?.map((item, i) => {
                                 return (
-                                    <div key={i} className="cards rounded-3 shadow-sm">
-                                        <img className="w-100 rounded-top-2" src={URL.createObjectURL(item)} alt="img"/>
+                                    <div key={i} className="cards card rounded shadow-sm">
+                                        {/*<img className="w-100 rounded-top-2" src={URL.createObjectURL(item)} alt="img"/>*/}
+                                        <span className="position-absolute rounded"
+                                              style={{right: 5, top: 5}} onClick={() => deleteFile(item._id)}>
+                                                <i className="bi bi-x-circle bg-light px-1 rounded"></i>
+                                        </span>
+                                        <img className="w-100 rounded-top-2"
+                                             title={item.name}
+                                             src={`${backendUrl + item.filePath}`} alt={item.name}
+                                             crossOrigin={"anonymous"}
+                                             onError={(e) => e.target.style.display = 'none'}/>
                                         <div className="d-flex justify-content-between px-2 mt-2">
                                             <p>title</p>
                                             <p><i className="bi bi-suit-heart"></i> 5</p>

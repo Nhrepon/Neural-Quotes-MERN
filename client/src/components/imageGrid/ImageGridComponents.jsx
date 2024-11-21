@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import './style.css';
+import axios from "axios";
 
 const ImageGridComponents = () => {
 
@@ -63,20 +64,33 @@ const ImageGridComponents = () => {
         }
     ]
 
+    const [imgFile, setImgFile] = useState(null);
+
+    const loadFile = async ()=>{
+        const res = await axios.get("api/fileLoad");
+        setImgFile(res.data.file);
+    }
+
+    useEffect(() => {
+        (async ()=>{
+            await loadFile();
+        })()
+    }, []);
+
 
     return (
         <div className="container">
             <div className="row">
                 <div className="grid-container my-2">
                     {
-                        data.map((item, i)=>{
+                        imgFile?.map((item, i)=>{
                             return(
                                 <>
                                     <div className="cards rounded-3 shadow-sm">
-                                        <img className="w-100 rounded-top-2" src={item.url} alt={item.title}/>
+                                        <img className="w-100 rounded-top-2" src={`http://localhost:2000/${item.filePath}`} alt={"item.title"} crossOrigin={"anonymous"}/>
                                         <div className="d-flex justify-content-between px-2 mt-2">
-                                            <p>{item.title}</p>
-                                            <p><i className="bi bi-suit-heart"></i> {item.love}</p>
+                                            <p>title</p>
+                                            <p><i className="bi bi-suit-heart"></i> {"item.love"}</p>
                                         </div>
                                     </div>
                                 </>

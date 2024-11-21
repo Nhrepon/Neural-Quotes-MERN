@@ -42,7 +42,7 @@ const DashboardSidebar = () => {
                 id="menu"
             >
                 <li className="nav-item bg-light p-1 p-sm-2 rounded my-2 d-flex">
-                    <Link to="/dashboard" className="nav-link">
+                    <Link to="/" className="nav-link">
                         <i className="bi-house-fill"></i>
                         <span className="ms-2 d-none d-sm-inline">Home</span>
                     </Link>

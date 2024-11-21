@@ -11,6 +11,8 @@ router.post('/userRegistration', UserController.userRegistration);
 
 
 router.post('/fileUpload', FileUploadController.fileUpload);
+router.get('/fileLoad', FileUploadController.fileLoad);
+router.delete('/fileDelete/:id', FileUploadController.fileDelete);
 
 
 

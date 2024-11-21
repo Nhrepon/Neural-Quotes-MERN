@@ -29,7 +29,7 @@ app.use(
         contentSecurityPolicy: {
             directives: {
                 defaultSrc: ["'self'"],
-                imgSrc: ["'self'", "https://thereadersea.com/", "data:"],
+                imgSrc: ["'self'", "http://localhost:2000", "data:"],
             },
         },
     }),
@@ -40,7 +40,7 @@ app.use(
 
 
 // Req rate limiting
-const limiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 30000 });
+const limiter = rateLimit({ windowMs: 15 * 60 * 1000, limit: 3000 });
 app.use(limiter);
 
 // json body parse
@@ -65,10 +65,14 @@ mongoose.connect(url, option).then((res) => {
 });
 
 
+const path = require("path");
+//app.use('/uploads', express.static('uploads'));
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 
 // Api router manage
 app.use("/api", router);
+
 
 
 app.set("etag", false);
