@@ -38,7 +38,7 @@ const UploadMediaComponent = () => {
                 await loadFile();
                 toast.success(`${id} deleted successfully!`);
             }else {
-                toast.error(`${id} deleted failed!`);
+                toast.error(`${id} deleted failed! and message ${res.data.status}`);
             }
         }
 

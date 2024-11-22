@@ -2,6 +2,7 @@
 const multer = require('multer');
 const path = require('path');
 const FileModel = require("../model/FileModel");
+const fs = require('fs');
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
@@ -35,11 +36,6 @@ exports.fileUpload = async (req, res)=>{
 
 
 
-
-
-
-
-
 exports.fileLoad = async (req, res)=>{
     try {
         const data =await FileModel.find().sort({ updatedAt : -1 });
@@ -49,11 +45,26 @@ exports.fileLoad = async (req, res)=>{
     }
 }
 
+
+
 exports.fileDelete = async (req, res)=>{
     try {
         const {id} = req.params;
-        const data =await FileModel.deleteOne({_id: id});
-        res.json({status:"success", file:data});
+        const file = await FileModel.findOne({_id:id});
+        const fileDirectory = path.join(__dirname, '../..', file.filePath);
+        if (file) {
+            fs.unlink(fileDirectory, (async (err) => {
+                if (err){
+                    res.json({status:"File delete failed from directory!", message:err});
+                }
+                else {
+                    const data =await FileModel.deleteOne({_id: id});
+                    res.json({status:"success", data:data});
+                }
+            }));
+        }
+
+
     }catch (e) {
         res.json({status:"failed", message:e});
     }
