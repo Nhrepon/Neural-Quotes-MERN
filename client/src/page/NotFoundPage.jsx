@@ -1,7 +1,7 @@
 import React from 'react';
 import MasterLayout from '../layout/MasterLayout';
 
-const NotFound = () => {
+const NotFoundPage = () => {
     return (
         <MasterLayout>
             <div className="container-fluid my-5">
@@ -19,4 +19,4 @@ const NotFound = () => {
     );
 };
 
-export default NotFound;
+export default NotFoundPage;

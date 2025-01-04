@@ -37,7 +37,6 @@ const UserStore = create((set)=>({
     //////////////////////////////////////////////////////////////
 
     loginFormValue: {email:"", password:""},
-
     loginFormOnChange:(name, value)=>{
         set((state)=>({
             loginFormValue:{
@@ -51,14 +50,16 @@ const UserStore = create((set)=>({
         try {
             set({isFormSubmit:true});
             const response = await axios.post(`/api/userLogin`, postBody);
-            sessionStorage.setItem("email",postBody.email);
 
             set({isFormSubmit:false});
 
-            if(response.data["status"] === "userNotFound"){
+            if(response.data["status"] === "success"){
+                sessionStorage.setItem("email",postBody.email);
+                return true;
+            }else if(response.data["status"] === "userNotFound"){
                 return false;
             } else {
-                return response.data["status"] === "success";
+                return false;
             }
 
         }catch (e) {

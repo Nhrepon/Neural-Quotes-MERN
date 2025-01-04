@@ -72,7 +72,8 @@ export async  function InfoAlert(msg) {
 
 
 export function isLogin(){
-    const cookie = !!Cookies.get("token");
-    //console.log(cookie);
-    return cookie;
+    //console.log("this is cookie: "+ sessionStorage.getItem('email'));
+    //return sessionStorage.getItem('email') != null && Cookies.get("token") != null;
+
+    return !!Cookies.get("token"); // !! to get boolean result
 }

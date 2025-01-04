@@ -1,10 +1,23 @@
 import React from "react";
 import {Link} from "react-router-dom";
 import $ from "jquery";
+import {isLogin} from "../utility/Utility.js";
+import userStore from "../store/UserStore.js";
+
+
+
 
 
 const TopNavigationBar = () => {
 
+  const { userLogout } = userStore();
+
+  const handleLogout = async () => {
+    await userLogout();
+    sessionStorage.clear();
+    localStorage.clear();
+    window.location.href = ("/");
+  }
 
   // Change navigation bg on scroll ---------------------------------------------
   $(function() {
@@ -27,9 +40,9 @@ const TopNavigationBar = () => {
 
 
 
-  const isLogin = ()=>{
-    return true;
-  };
+  // const isLogin = ()=>{
+  //   return false;
+  // };
 
 
   return (
@@ -107,8 +120,7 @@ const TopNavigationBar = () => {
                               <li>
                                 <hr className="dropdown-divider" />
                               </li>
-                              <li><button type="submit" className="dropdown-item"
-                                          text="Logout" >Logout</button></li>
+                              <li><button  onClick={handleLogout} type="submit" className="dropdown-item" text="Logout" >Logout</button></li>
                             </>
                           )
                           :

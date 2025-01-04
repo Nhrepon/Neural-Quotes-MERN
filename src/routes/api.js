@@ -1,18 +1,21 @@
 const express = require('express');
 const UserController = require("../controller/UserController");
 const FileUploadController = require("../controller/FileUploadController");
+const AuthMiddleware = require("../middleware/AuthMiddleware");
 
 const router = express.Router();
 
 
 router.post('/userRegistration', UserController.userRegistration);
+router.post('/userLogin', UserController.userLogin);
+router.post('/userLogout', UserController.userLogout);
 
 
 
 
-router.post('/fileUpload', FileUploadController.fileUpload);
+router.post('/fileUpload', AuthMiddleware, FileUploadController.fileUpload);
 router.get('/fileLoad', FileUploadController.fileLoad);
-router.delete('/fileDelete/:id', FileUploadController.fileDelete);
+router.delete('/fileDelete/:id', AuthMiddleware, FileUploadController.fileDelete);
 
 
 
