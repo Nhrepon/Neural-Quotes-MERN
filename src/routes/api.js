@@ -15,6 +15,7 @@ router.post('/userLogout', UserController.userLogout);
 
 router.post('/fileUpload', AuthMiddleware, FileUploadController.fileUpload);
 router.get('/fileLoad', FileUploadController.fileLoad);
+router.get('/singleFile/:id', FileUploadController.singleFile);
 router.delete('/fileDelete/:id', AuthMiddleware, FileUploadController.fileDelete);
 
 

@@ -1,0 +1,24 @@
+.contact-info .item {
+    width: 100%;
+    overflow: hidden;
+}
+
+.contact-info .item .icon {
+    width: 60px;
+    height: 60px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #fff;
+    border-radius: 50%;
+    margin-right: 10px;
+    float: left;
+}
+
+.contact-info .item .icon i {
+    margin: 0;
+}
+
+.contact-info .item .content {
+    overflow: hidden;
+}

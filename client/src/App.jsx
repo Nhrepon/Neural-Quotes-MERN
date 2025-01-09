@@ -7,36 +7,50 @@ import LoginPage from "./page/LoginPage.jsx";
 import RegistrationPage from "./page/RegistrationPage.jsx";
 import {isLogin} from "./utility/Utility.js";
 import NotFoundPage from "./page/NotFoundPage.jsx";
+import AboutPage from "./page/AboutPage.jsx";
+import ContactPage from "./page/ContactPage.jsx";
+import BlogPage from "./page/BlogPage.jsx";
+import SinglePage from "./page/SinglePage.jsx";
 
 
 
 const App = () => {
+    const isLogedin = isLogin();
 
-    if(isLogin()){
+    const commonRuotes = [
+        {path:'/', element:<HomePage/>},
+        {path:'/about', element:<AboutPage/>},
+        {path:'/contact', element:<ContactPage/>},
+        {path:'/blog', element:<BlogPage/>},
+        {path:'/login', element:<LoginPage/>},
+        {path:"/registration",element:<RegistrationPage/>},
+
+        {path:"/details/:id",element:<SinglePage/>},
+
+        {path:"/*", element:<NotFoundPage/>},
+    ]
+
+    const protectedRoutes = [
+        {path:"/dashboard", element:<DashboardPage/>},
+        {path:"/media", element:<MediaPage/>},
+
+    ]
+
+    const routes = isLogedin? [...protectedRoutes, ...commonRuotes]:[...commonRuotes];
+
     return (
         <BrowserRouter>
             <Routes>
-                <Route path="/" element={<HomePage/>}  />
-                <Route path="/registration" element={<RegistrationPage/>}  />
-                <Route path="/login" element={<LoginPage/>}  />
-                <Route path="/dashboard" element={<DashboardPage/>}  />
-                <Route path="/media" element={<MediaPage/>}  />
-            </Routes>
-        </BrowserRouter>
-
-    );}
-    return (
-        <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<HomePage/>}  />
-                <Route path="/registration" element={<RegistrationPage/>}  />
-                <Route path="/login" element={<LoginPage/>}  />
-
-                <Route path="/*" element={<NotFoundPage/>}  />
+                {
+                    routes.map(({path, element}, index)=>(
+                        <Route path={path} element={element} key={index} />
+                    ))
+                }
             </Routes>
         </BrowserRouter>
 
     );
+
 
 };
 

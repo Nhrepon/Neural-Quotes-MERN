@@ -18,7 +18,7 @@ const BlogPage = () => {
                     
                 </div>
             </div>
-            <BlogListComponents/>
+
 
         </MasterLayout>
     );

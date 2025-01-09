@@ -1,0 +1,27 @@
+.blogDetails p{
+    font:1.2em Georgia, sans-serif;
+    letter-spacing: inherit;
+    line-height: inherit;
+}
+
+.blogDetails h2{
+    font: 2em 'Georgia', sans-serif;
+}
+.blogDetails h3{
+    font: 1.6em 'Georgia', sans-serif;
+}
+
+.blogDetails ul li{
+    font-size: 1.4em;
+}
+
+.blogDetails .content img{
+    width: 100%;
+    height: auto;
+}
+
+.blogDetails .content a{
+    font: 1.2em 'Georgia', sans-serif;
+    text-decoration: none;
+
+}

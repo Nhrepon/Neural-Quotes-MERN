@@ -47,6 +47,18 @@ exports.fileLoad = async (req, res)=>{
 
 
 
+exports.singleFile = async (req, res)=>{
+    try{
+        const {id} = req.params;
+        const data = await FileModel.find({_id:id});
+        return res.json({status:"success", data:data});
+    }catch (e) {
+        res.json({status:"error", message:e.message});
+    }
+}
+
+
+
 exports.fileDelete = async (req, res)=>{
     try {
         const {id} = req.params;
