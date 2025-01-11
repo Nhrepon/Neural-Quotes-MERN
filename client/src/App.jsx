@@ -27,7 +27,7 @@ const App = () => {
 
         {path:"/details/:id",element:<SinglePage/>},
 
-        {path:"/*", element:<NotFoundPage/>},
+        {path:"*", element:<NotFoundPage/>},
     ]
 
     const protectedRoutes = [
@@ -43,7 +43,7 @@ const App = () => {
             <Routes>
                 {
                     routes.map(({path, element}, index)=>(
-                        <Route path={path} element={element} key={index} />
+                        <Route path={path} element={element} />
                     ))
                 }
             </Routes>

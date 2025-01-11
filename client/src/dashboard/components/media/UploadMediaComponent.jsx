@@ -65,7 +65,7 @@ const UploadMediaComponent = () => {
                 }
 
             }catch (e) {
-                toast.error(`error occurred: ${e}`);
+                toast.error(`error occurred: ${e.message}`);
             }
         }else {
             toast.error("Please, Select images");

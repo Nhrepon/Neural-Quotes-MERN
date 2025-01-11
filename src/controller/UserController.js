@@ -38,9 +38,9 @@ exports.userLogin=async (req, res)=>{
         const user = await UserModel.find({email: email, password: password});
 
         if (user.length > 0){
-            const userId=user[0]._id;
+            const userId = user[0]._id;
             const role = user[0].role;
-            const token = encodeToken(email,userId, role);
+            const token = encodeToken(email,userId,role);
             const cookieOption = {expires:new Date(Date.now()+30*24*60*60*1000), httpOnly:false};
             res.cookie("token", token, cookieOption);
             res.json({status: "success", token: token});
