@@ -4,6 +4,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 import {DeleteAlert} from "../../../utility/Utility.js";
 import {backendUrl} from "../../../../config.js";
+import imageCompression from "browser-image-compression";
 
 
 const UploadMediaComponent = () => {
@@ -47,10 +48,49 @@ const UploadMediaComponent = () => {
 
     const uploadFile = async ()=>{
         let formData = new FormData();
-        if (file!=null){
-            file.map((item)=>{
-                formData.append('file',item);
-            })
+        const category = document.getElementById("category").value;
+        if (file!=null && file.length > 0){
+
+            //files.forEach((file) => formData.append('file', file));
+
+            for (const item of file) {
+                const options = {
+                    maxSizeMB: 1, // Maximum size in MB
+                    maxWidthOrHeight: 1920, // Maximum width or height
+                    useWebWorker: true, // Use a web worker for better performance
+                    initialQuality: 1, // Control quality (100% quality)
+                };
+
+                // Compress the file
+                const compressedBlob = await imageCompression(item, options);
+
+                // Reconstruct file with original name and extension
+                const originalName = item.name; // Get original file name
+                const extension = originalName.split('.').pop(); // Extract extension
+                const compressedFile = new File([compressedBlob], originalName, {
+                    type: compressedBlob.type, // Preserve the MIME type
+                });
+
+                // Append the compressed file to FormData
+                formData.append("file", compressedFile);
+                formData.append("category", category);
+            }
+
+
+            // file.map(async (item) => {
+            //
+            //     const options = {
+            //         maxSizeMB: 1, // Maximum size in MB
+            //         maxWidthOrHeight: 1024, // Maximum width or height
+            //         useWebWorker: true, // Use a web worker for better performance
+            //     };
+            //     const compressedFile = await imageCompression(item, options);
+            //
+            //     formData.append('file', compressedFile);
+            //
+            // })
+
+
 
             try {
                 const res = await axios.post("/api/fileUpload", formData, { headers: { "Content-Type": "multipart/form-data" } });
@@ -89,6 +129,10 @@ const UploadMediaComponent = () => {
             <div className="row">
                 <div className="col-4 border-end vh-100">
                     <div className="card shadow-lg p-5 gap-4">
+                        <select name="category" id="category" className={"form-control"}>
+                            <option value="Romantic">Romantic</option>
+                            <option value="Couple">Couple</option>
+                        </select>
                         <input id={"file"} className="form-control" type="file" multiple accept="image/*" onChange={handleFileChange} name="file"/>
                         <button onClick={uploadFile} className="btn btn-success" type="submit">Upload Media</button>
                     </div>

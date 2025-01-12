@@ -10,6 +10,9 @@ router.post('/userRegistration', UserController.userRegistration);
 router.post('/userLogin', UserController.userLogin);
 router.post('/userLogout', UserController.userLogout);
 
+router.get('/userProfileRead', AuthMiddleware, UserController.userProfileRead);
+router.put('/userProfileUpdate', AuthMiddleware, UserController.userProfileUpdate);
+
 
 
 

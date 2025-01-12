@@ -1,34 +1,25 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Link} from "react-router-dom";
+import UserStore from "../../store/UserStore.js";
 
 const DashboardSidebar = () => {
 
+    const {userLogout, getUserProfile, userProfileForm} = UserStore();
+    useEffect(()=>{
+        (async ()=>{
+            await getUserProfile();
+            console.log("user data: "+ userProfileForm);
+        })()
+    },[]);
+
+    const handleLogout = async () => {
+        await userLogout();
+        sessionStorage.clear();
+        localStorage.clear();
+        window.location.href = ("/");
+    }
 
     return (
-        // <div className="sidebar position-sticky top-0 min-vh-100">
-        //     <h2 className="text-light text-center mt-2">
-        //         <i className="bi bi-speedometer me-2"></i>
-        //         <Link to="/dashboard" className="d-none d-sm-inline-block fs-2 nav-link">Dashboard</Link>
-        //     </h2>
-        //     <hr/>
-        //     <ul className="list-unstyled">
-        //         {
-        //             item?.map((item, i) => {
-        //                 return (
-        //                     <>
-        //                         <li key={i} className="nav-item bg-light p-1 p-sm-2 rounded my-2 d-flex">
-        //
-        //                             <Link className="nav-link" to={item.href}>
-        //                                 <i className={item.class}></i>
-        //                                 <span className="d-none d-sm-inline-block">{item.name}</span>
-        //                             </Link>
-        //                         </li>
-        //                     </>
-        //                 )
-        //             })
-        //         }
-        //     </ul>
-        // </div>
 
         <div className="sidebar position-sticky top-0 min-vh-100">
             <h2 className="text-light text-center mt-2">
@@ -51,7 +42,7 @@ const DashboardSidebar = () => {
                     <Link to="#post" className="nav-link" data-bs-toggle="collapse" aria-expanded="false"
                           aria-controls="post">
                         <i className="bi bi-card-text"></i>
-                        <span className="ms-2 d-none d-sm-inline">Post</span>
+                        <span className="ms-2 d-none d-sm-inline">Quotes</span>
                     </Link>
                 </li>
                 <ul className="collapse list-unstyled ms-3 " id="post" data-bs-parent="#menu">
@@ -87,23 +78,12 @@ const DashboardSidebar = () => {
                     </Link>
                 </li>
                 <li className="nav-item bg-light p-2 rounded my-2">
-                    <Link to="#Portfolio" data-bs-toggle="collapse" className="nav-link">
+                    <Link to="/category" className="nav-link">
                         <i className="bi bi-briefcase"></i>
-                        <span className="ms-2 d-none d-sm-inline">Portfolio</span>
+                        <span className="ms-2 d-none d-sm-inline">Category</span>
                     </Link>
                 </li>
-                    <ul className="collapse list-unstyled ms-3 " id="Portfolio"  data-bs-parent="#menu">
-                    <li className="nav-item bg-light px-2 py-1 rounded my-2">
-                        <Link to="/mern" className="nav-link">
-                            <span className="d-none d-sm-inline">MERN</span> 1
-                        </Link>
-                    </li>
-                    <li className="nav-item bg-light px-2 py-1 rounded my-2">
-                        <a href="#" className="nav-link">
-                            <span className="d-none d-sm-inline">React</span> 2
-                        </a>
-                    </li>
-                </ul>
+
                 <li className="nav-item bg-light p-2 rounded my-2">
                     <Link to="#Products" data-bs-toggle="collapse" className="nav-link">
                         <i className="bi-cart4"></i>
@@ -139,9 +119,9 @@ const DashboardSidebar = () => {
                     </a>
                 </li>
                 <li className="nav-item bg-light p-2 rounded my-2">
-                    <Link to="/users" className="nav-link px-0 align-middle link-dark">
+                    <Link to="/user" className="nav-link px-0 align-middle link-dark">
                         <i className="bi bi-person-circle"></i>
-                        <span className="ms-1 d-none d-sm-inline">Users</span>
+                        <span className="ms-1 d-none d-sm-inline">User</span>
                     </Link>
                 </li>
             </ul>
@@ -149,14 +129,13 @@ const DashboardSidebar = () => {
             <hr/>
 
             <div className="dropdown mb-3 ms-3 bottom-0 position-absolute">
-                <a href="#" className="d-flex align-items-center link-dark text-decoration-none dropdown-toggle" id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="https://github.com/mdo.png" alt="home" width="32" height="32" className="rounded-circle me-2"/>
-                    <strong>NHRepon</strong>
+                <a href="#" className="d-flex text-wrap align-items-center link-dark text-decoration-none dropdown-toggle"
+                   id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
+                    <img src="./vite.svg" alt="home" width="32" height="32"
+                         className="rounded-circle me-2"/>
+                    <strong>{userProfileForm.userName}</strong>
                 </a>
-                <ul
-                    className="dropdown-menu text-small shadow"
-                    aria-labelledby="dropdownUser2"
-                >
+                <ul className="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
                     <li>
                         <Link to="/profile" className="dropdown-item">
                             New project...
@@ -176,12 +155,13 @@ const DashboardSidebar = () => {
                         <hr className="dropdown-divider"/>
                     </li>
                     <li>
-                        <Link to="/logout" className="dropdown-item">
+                        <Link onClick={handleLogout} className="dropdown-item" to="#">
                             Sign out
                         </Link>
                     </li>
                 </ul>
             </div>
+
         </div>
     );
 };

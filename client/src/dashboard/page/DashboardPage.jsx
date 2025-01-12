@@ -16,28 +16,6 @@ const DashboardPage = () => {
             <p>this is dashboard</p>
             <p>this is dashboard</p>
             <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
-            <p>this is dashboard</p>
         </DashboardLayout>
     );
 };

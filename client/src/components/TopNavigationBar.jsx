@@ -2,13 +2,14 @@ import React from "react";
 import {Link} from "react-router-dom";
 import $ from "jquery";
 import {isLogin} from "../utility/Utility.js";
-import userStore from "../store/UserStore.js";
 import toast from "react-hot-toast";
+import UserStore from "../store/UserStore.js";
+
 
 
 const TopNavigationBar = () => {
+    const {userLogout} = UserStore();
 
-    const {userLogout} = userStore();
 
     const handleLogout = async () => {
         await userLogout();
@@ -75,7 +76,7 @@ const TopNavigationBar = () => {
                             <ul className="navbar-nav mx-auto mb-2 mb-lg-0">
                                 {
                                     navItem.map((item, i) => (
-                                        <li className="nav-item">
+                                        <li key={i} className="nav-item">
                                             <Link className="nav-link " to={item.to}>
                                                 {item.title}
                                             </Link>

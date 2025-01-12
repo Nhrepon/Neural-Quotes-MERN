@@ -10,16 +10,14 @@ const AuthMiddleware= async (req, res, next)=>{
             res.status(401).json({status:"token failed", error:"No token provided"});
         }
 
-        console.log(token);
-
+        //console.log(token);
         const decode = decodeToken(token);
-
         //console.log(decode);
-        if(decode){
+        if(decode != null){
             const {email, userId, role} = decode;
             const data = await UserModel.findOne({_id: userId});
 
-            if(data){
+            if(data != null){
                 req.headers.email=email;
                 req.headers.userId=userId;
                 req.headers.role=role;

@@ -60,7 +60,7 @@ exports.userLogin=async (req, res)=>{
 exports.userProfileRead=async (req, res)=>{
     try {
         const {userId} = req.headers;
-
+        //console.log(req.headers.userId)
         const user=await UserModel.findOne({_id:userId}, {password:0});
         const profile = await ProfileModel.findOne({userId:userId}, {_id:0, userId:0});
 

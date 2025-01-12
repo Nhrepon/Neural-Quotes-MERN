@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const databaseSchema = mongoose.Schema({
-    name: {type: String, default: "Neural quotes"},
+    userId: {type:mongoose.Schema.Types.ObjectId, required:true},
     category: {type: String, default: "category"},
     filePath: {type: String, required: true},
 },

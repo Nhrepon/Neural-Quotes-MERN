@@ -11,6 +11,8 @@ import AboutPage from "./page/AboutPage.jsx";
 import ContactPage from "./page/ContactPage.jsx";
 import BlogPage from "./page/BlogPage.jsx";
 import SinglePage from "./page/SinglePage.jsx";
+import UserPage from "./dashboard/page/UserPage.jsx";
+import CategoryPage from "./dashboard/page/CategoryPage.jsx";
 
 
 
@@ -33,6 +35,8 @@ const App = () => {
     const protectedRoutes = [
         {path:"/dashboard", element:<DashboardPage/>},
         {path:"/media", element:<MediaPage/>},
+        {path:"/category", element:<CategoryPage/>},
+        {path:"/user", element:<UserPage/>},
 
     ]
 
@@ -43,7 +47,7 @@ const App = () => {
             <Routes>
                 {
                     routes.map(({path, element}, index)=>(
-                        <Route path={path} element={element} />
+                        <Route path={path} element={element}  key={index}/>
                     ))
                 }
             </Routes>

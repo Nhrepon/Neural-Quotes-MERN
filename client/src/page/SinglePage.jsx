@@ -29,13 +29,18 @@ const SinglePage = () => {
     return <MasterLayout>
         <div className="container">
             <div className="row">
-                <div className="col-6">
+                <div className="col-sm-6">
                     {
                         file && file.length > 0 && (
-                            <img className={"card-img"} src={backendUrl + file[0].filePath} alt={file[0].name}
-                                 crossOrigin={"anonymous"}/>
+                            <div className="card my-2">
+                                <img className={"card-img"} src={backendUrl + file[0].filePath} alt={file[0].name}
+                                     crossOrigin={"anonymous"}/>
+                            </div>
                         )
                     }
+                </div>
+                <div className="col-sm-6">
+                    <h2>image details</h2>
                 </div>
             </div>
         </div>

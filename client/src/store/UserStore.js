@@ -79,27 +79,22 @@ const UserStore = create((set)=>({
             },
         }))
     },
-    userProfile: null,
     getUserProfile: async ()=>{
         try {
             const profileData = await axios.get("/api/userProfileRead");
             
             if(profileData.data["status"] === "success"){
-                set({ userProfile: profileData.data['profile'] });
                 set({ userProfileForm: profileData.data['profile'] });
-            }else {
-                set({ userProfile: null});
             }
 
         }catch (error) {
-            return ({status:"error", message:error});
+            return ({status:"error", message:error.message});
         }
     },
 
     userProfileUpdate: async (postBody)=>{
         try {
-            set({userProfile:null});
-            const response = await axios.post("/api/userProfileUpdate", postBody);
+            const response = await axios.put("/api/userProfileUpdate", postBody);
             return response.data["status"] === "success";
         }catch (error) {
             return ({status:"error", message:error});

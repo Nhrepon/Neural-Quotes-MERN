@@ -1,6 +1,8 @@
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
 
+
+
 export function unauthorized(code){
     if(code===401){
         sessionStorage.clear();
@@ -77,3 +79,6 @@ export function isLogin(){
 
     return !!Cookies.get("token"); // !! to get boolean result
 }
+
+
+

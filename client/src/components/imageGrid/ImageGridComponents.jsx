@@ -88,8 +88,8 @@ const ImageGridComponents = () => {
                     {
                         imgFile?.map((item, i)=>{
                             return(
-                                <>
-                                    <div className="cards rounded-3 shadow-sm">
+
+                                    <div key={i} className="cards rounded-3 shadow-sm">
                                         <Link to={`/details/${item._id}`}>
                                         <img className="w-100 rounded-top-2" src={`http://localhost:2000/${item.filePath}`} alt={"item.title"} crossOrigin={"anonymous"}/>
                                         <div className="d-flex justify-content-between px-2 mt-2">
@@ -98,7 +98,7 @@ const ImageGridComponents = () => {
                                         </div>
                                         </Link>
                                     </div>
-                                </>
+
                             );
                         })
                     }
