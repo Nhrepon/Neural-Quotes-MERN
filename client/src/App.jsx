@@ -13,6 +13,7 @@ import BlogPage from "./page/BlogPage.jsx";
 import SinglePage from "./page/SinglePage.jsx";
 import UserPage from "./dashboard/page/UserPage.jsx";
 import CategoryPage from "./dashboard/page/CategoryPage.jsx";
+import QuotesPage from "./dashboard/page/QuotesPage.jsx";
 
 
 
@@ -34,6 +35,7 @@ const App = () => {
 
     const protectedRoutes = [
         {path:"/dashboard", element:<DashboardPage/>},
+        {path:"/quotes", element:<QuotesPage/>},
         {path:"/media", element:<MediaPage/>},
         {path:"/category", element:<CategoryPage/>},
         {path:"/user", element:<UserPage/>},

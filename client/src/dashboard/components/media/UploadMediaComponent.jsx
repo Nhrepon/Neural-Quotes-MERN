@@ -5,9 +5,11 @@ import toast from "react-hot-toast";
 import {DeleteAlert} from "../../../utility/Utility.js";
 import {backendUrl} from "../../../../config.js";
 import imageCompression from "browser-image-compression";
+import MediaStore from "../../store/MediaStore.js";
 
 
 const UploadMediaComponent = () => {
+    const {fileList, getFileList}=MediaStore();
     const [file, setFile] = useState( null);
 
     const handleFileChange = (e) => {
@@ -15,15 +17,15 @@ const UploadMediaComponent = () => {
     }
 
 
-    const [imgFile, setImgFile] = useState(null);
-    const loadFile = async ()=>{
-        const res = await axios.get("api/fileLoad");
-        setImgFile(res.data.file);
-    }
+    // const [imgFile, setImgFile] = useState(null);
+    // const loadFile = async ()=>{
+    //     const res = await axios.get("api/fileLoad");
+    //     setImgFile(res.data.file);
+    // }
 
     useEffect(() => {
         (async ()=>{
-            await loadFile();
+            await getFileList();
         })()
     }, []);
 
@@ -36,7 +38,7 @@ const UploadMediaComponent = () => {
         if(await DeleteAlert()){
             const res = await axios.delete(`api/fileDelete/${id}`);
             if (res.data.status === "success") {
-                await loadFile();
+                await getFileList();
                 toast.success(`${id} deleted successfully!`);
             }else {
                 toast.error(`${id} deleted failed! and message ${res.data.status}`);
@@ -97,7 +99,7 @@ const UploadMediaComponent = () => {
                 if(res['data'].status === "success"){
                     //setImgFile(res.data.path);
                     setFile(null);
-                    await loadFile();
+                    await getFileList();
                     document.getElementById("file").value = "";
                     toast.success(`File upload success!`);
                 }else {
@@ -156,7 +158,7 @@ const UploadMediaComponent = () => {
                 <div className="col-8">
                     <div className="grid-container my-2">
                         {
-                            imgFile?.map((item, i) => {
+                            fileList?.map((item, i) => {
                                 return (
                                     <div key={i} className="cards card rounded shadow-sm">
                                         {/*<img className="w-100 rounded-top-2" src={URL.createObjectURL(item)} alt="img"/>*/}

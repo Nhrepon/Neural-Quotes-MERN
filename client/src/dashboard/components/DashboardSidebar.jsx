@@ -38,39 +38,45 @@ const DashboardSidebar = () => {
                         <span className="ms-2 d-none d-sm-inline">Home</span>
                     </Link>
                 </li>
+                {/*<li className="nav-item bg-light p-2 rounded my-2">*/}
+                {/*    <Link to="#post" className="nav-link" data-bs-toggle="collapse" aria-expanded="false"*/}
+                {/*          aria-controls="post">*/}
+                {/*        <i className="bi bi-card-text"></i>*/}
+                {/*        <span className="ms-2 d-none d-sm-inline">Quotes</span>*/}
+                {/*    </Link>*/}
+                {/*</li>*/}
+                {/*<ul className="collapse list-unstyled ms-3 " id="post" data-bs-parent="#menu">*/}
+                {/*    <li className="nav-item bg-light px-2 py-1 rounded my-2">*/}
+                {/*        <Link to="/new-post" className="nav-link">*/}
+                {/*            <span className="d-none d-sm-inline">New post</span>*/}
+                {/*            <span className="d-sm-none d-inline-block">New</span>*/}
+                {/*        </Link>*/}
+                {/*    </li>*/}
+                {/*    <li className="nav-item bg-light px-2 py-1 rounded my-2">*/}
+                {/*        <Link to="/all-post" className="nav-link link-dark">*/}
+                {/*            <span className="d-none d-sm-inline">All post</span>*/}
+                {/*            <span className="d-sm-none d-inline-block">All</span>*/}
+                {/*        </Link>*/}
+                {/*    </li>*/}
+                {/*    <li className="nav-item bg-light px-2 py-1 rounded my-2">*/}
+                {/*        <Link to="/category" className="nav-link">*/}
+                {/*            <span className="d-none d-sm-inline">Category</span>*/}
+                {/*            <span className="d-sm-none d-inline-block">Cat</span>*/}
+                {/*        </Link>*/}
+                {/*    </li>*/}
+                {/*    <li className="nav-item bg-light px-2 py-1 rounded my-2">*/}
+                {/*        <Link to="/tags" className="nav-link">*/}
+                {/*            <span className="d-none d-sm-inline">Tags</span>*/}
+                {/*            <span className="d-sm-none d-inline-block">Tags</span>*/}
+                {/*        </Link>*/}
+                {/*    </li>*/}
+                {/*</ul>*/}
                 <li className="nav-item bg-light p-2 rounded my-2">
-                    <Link to="#post" className="nav-link" data-bs-toggle="collapse" aria-expanded="false"
-                          aria-controls="post">
-                        <i className="bi bi-card-text"></i>
+                    <Link to="/quotes" className="nav-link px-0 align-middle">
+                        <i className="bi bi-card-image "></i>
                         <span className="ms-2 d-none d-sm-inline">Quotes</span>
                     </Link>
                 </li>
-                <ul className="collapse list-unstyled ms-3 " id="post" data-bs-parent="#menu">
-                    <li className="nav-item bg-light px-2 py-1 rounded my-2">
-                        <Link to="/new-post" className="nav-link">
-                            <span className="d-none d-sm-inline">New post</span>
-                            <span className="d-sm-none d-inline-block">New</span>
-                        </Link>
-                    </li>
-                    <li className="nav-item bg-light px-2 py-1 rounded my-2">
-                        <Link to="/all-post" className="nav-link link-dark">
-                            <span className="d-none d-sm-inline">All post</span>
-                            <span className="d-sm-none d-inline-block">All</span>
-                        </Link>
-                    </li>
-                    <li className="nav-item bg-light px-2 py-1 rounded my-2">
-                        <Link to="/category" className="nav-link">
-                            <span className="d-none d-sm-inline">Category</span>
-                            <span className="d-sm-none d-inline-block">Cat</span>
-                        </Link>
-                    </li>
-                    <li className="nav-item bg-light px-2 py-1 rounded my-2">
-                        <Link to="/tags" className="nav-link">
-                            <span className="d-none d-sm-inline">Tags</span>
-                            <span className="d-sm-none d-inline-block">Tags</span>
-                        </Link>
-                    </li>
-                </ul>
                 <li className="nav-item bg-light p-2 rounded my-2">
                     <Link to="/media" className="nav-link px-0 align-middle">
                         <i className="bi bi-card-image "></i>
@@ -129,11 +135,12 @@ const DashboardSidebar = () => {
             <hr/>
 
             <div className="dropdown mb-3 ms-3 bottom-0 position-absolute">
-                <a href="#" className="d-flex text-wrap align-items-center link-dark text-decoration-none dropdown-toggle"
+                <a href="#"
+                   className="d-flex text-wrap align-items-center link-dark text-decoration-none dropdown-toggle"
                    id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                    <img src="./vite.svg" alt="home" width="32" height="32"
+                <img src="./user.svg" alt="home" width="32" height="32"
                          className="rounded-circle me-2"/>
-                    <strong>{userProfileForm.userName}</strong>
+                    <strong>{userProfileForm?.userName || "Guest"}</strong>
                 </a>
                 <ul className="dropdown-menu text-small shadow" aria-labelledby="dropdownUser2">
                     <li>

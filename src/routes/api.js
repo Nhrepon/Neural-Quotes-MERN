@@ -2,6 +2,7 @@ const express = require('express');
 const UserController = require("../controller/UserController");
 const FileUploadController = require("../controller/FileUploadController");
 const AuthMiddleware = require("../middleware/AuthMiddleware");
+const CategoryController = require("../controller/CategoryController");
 
 const router = express.Router();
 
@@ -21,6 +22,13 @@ router.get('/fileLoad', FileUploadController.fileLoad);
 router.get('/singleFile/:id', FileUploadController.singleFile);
 router.delete('/fileDelete/:id', AuthMiddleware, FileUploadController.fileDelete);
 
+
+
+// Category route
+router.post('/createCategory', AuthMiddleware, CategoryController.createCategory);
+router.get('/categoryList', CategoryController.categoryList);
+router.put('/updateCategory/:id', CategoryController.updateCategory);
+router.delete('/deleteCategory/:id',AuthMiddleware, CategoryController.deleteCategory);
 
 
 module.exports = router;
