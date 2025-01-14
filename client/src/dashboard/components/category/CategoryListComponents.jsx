@@ -215,6 +215,7 @@ const CategoryListComponents = () => {
                                                     </div>
                                                 </div>
                                             </div>
+
                                             <button onClick={async () => {
                                                 await deleteItem(item["_id"])
                                             }} className="btn text-danger border-0">

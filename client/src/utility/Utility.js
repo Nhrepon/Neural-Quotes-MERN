@@ -1,5 +1,6 @@
 import Swal from "sweetalert2";
 import Cookies from "js-cookie";
+import {Modal} from "bootstrap";
 
 
 
@@ -70,6 +71,14 @@ export async  function InfoAlert(msg) {
         allowOutsideClick: false
     });
     return result.isConfirmed;
+}
+
+
+export async function modalHide(id){
+    // Close the modal programmatically
+    const modalElement = document.getElementById(id);
+    const modalInstance = Modal.getInstance(modalElement) || new Modal(modalElement);
+    modalInstance.hide();
 }
 
 

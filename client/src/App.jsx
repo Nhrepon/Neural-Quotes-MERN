@@ -14,6 +14,7 @@ import SinglePage from "./page/SinglePage.jsx";
 import UserPage from "./dashboard/page/UserPage.jsx";
 import CategoryPage from "./dashboard/page/CategoryPage.jsx";
 import QuotesPage from "./dashboard/page/QuotesPage.jsx";
+import AuthorPage from "./dashboard/page/AuthorPage.jsx";
 
 
 
@@ -38,6 +39,7 @@ const App = () => {
         {path:"/quotes", element:<QuotesPage/>},
         {path:"/media", element:<MediaPage/>},
         {path:"/category", element:<CategoryPage/>},
+        {path:"/author", element:<AuthorPage/>},
         {path:"/user", element:<UserPage/>},
 
     ]

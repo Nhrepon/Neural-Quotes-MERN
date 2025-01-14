@@ -29,7 +29,9 @@ app.use(
         contentSecurityPolicy: {
             directives: {
                 defaultSrc: ["'self'"],
-                imgSrc: ["'self'", "http://localhost:2000", "data:"],
+                //imgSrc: ["'self'", "http://localhost:2000","http://localhost:5173", "data:"],
+                imgSrc: ["'self'","http://localhost:5173", "http://localhost:2000", "*", "data:", "blob:"]
+
             },
         },
     }),

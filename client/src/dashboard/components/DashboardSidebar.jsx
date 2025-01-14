@@ -89,7 +89,12 @@ const DashboardSidebar = () => {
                         <span className="ms-2 d-none d-sm-inline">Category</span>
                     </Link>
                 </li>
-
+                <li className="nav-item bg-light p-2 rounded my-2">
+                    <Link to="/author" className="nav-link px-0 align-middle link-dark">
+                        <i className="bi-people"></i>
+                        <span className="ms-1 d-none d-sm-inline">Authors</span>
+                    </Link>
+                </li>
                 <li className="nav-item bg-light p-2 rounded my-2">
                     <Link to="#Products" data-bs-toggle="collapse" className="nav-link">
                         <i className="bi-cart4"></i>
@@ -118,12 +123,7 @@ const DashboardSidebar = () => {
                         </a>
                     </li>
                 </ul>
-                <li className="nav-item bg-light p-2 rounded my-2">
-                    <a href="#" className="nav-link px-0 align-middle link-dark">
-                        <i className="bi-people"></i>
-                        <span className="ms-1 d-none d-sm-inline">Customers</span>
-                    </a>
-                </li>
+
                 <li className="nav-item bg-light p-2 rounded my-2">
                     <Link to="/user" className="nav-link px-0 align-middle link-dark">
                         <i className="bi bi-person-circle"></i>
