@@ -1,8 +1,9 @@
 import React, {useEffect, useState} from 'react';
 import CategoryStore from "../../store/CategoryStore.js";
 import toast from "react-hot-toast";
-import {DeleteAlert} from "../../../utility/Utility.js";
+import {DeleteAlert, modalHide} from "../../../utility/Utility.js";
 import {Modal} from "bootstrap";
+import MediaPicker from "../media/MediaPicker.jsx";
 
 
 const CategoryListComponents = () => {
@@ -15,12 +16,6 @@ const CategoryListComponents = () => {
         })()
     },[])
 
-    const modalHide = (id)=>{
-        // Close the modal programmatically
-        const modalElement = document.getElementById(id);
-        const modalInstance = Modal.getInstance(modalElement) || new Modal(modalElement);
-        modalInstance.hide();
-    }
 
     const onSubmit = async ()=>{
         if(categoryForm.categoryName === ""){
@@ -30,7 +25,7 @@ const CategoryListComponents = () => {
             if(res.status === "success"){
                 await getCategoryList();
                 toast.success("Category successfully.");
-                modalHide("create");
+                await modalHide("create");
             }else if(res.status === "duplicate"){
                 toast.error("Category name already exists!");
             }else {
@@ -44,7 +39,7 @@ const CategoryListComponents = () => {
         if(res.status === "success"){
             await getCategoryList();
             toast.success("Category updated successfully.");
-            modalHide("update");
+            await modalHide("update");
 
         }else if(res.status === "duplicate"){
             toast.error("Category name already exists!");
@@ -78,6 +73,7 @@ const CategoryListComponents = () => {
         <div className="container">
             <div className="row">
                 <div className="col-12">
+                    <MediaPicker/>
                     <div className="new">
                         <button type="button" className="btn btn-primary" data-bs-toggle="modal"
                                 data-bs-target="#create">New</button>
@@ -105,6 +101,7 @@ const CategoryListComponents = () => {
                                             <label htmlFor="CategoryImg">Category Image</label>
                                             <input value={categoryForm.categoryImg} onChange={(e)=>{categoryFormOnChange("categoryImg", e.target.value)}} type="text" name="CategoryImg" id="CategoryImg" className="form-control"/>
                                         </div>
+                                        <MediaPicker/>
                                     </div>
                                     <div className="modal-footer">
                                         <button type="button" className="btn btn-secondary"

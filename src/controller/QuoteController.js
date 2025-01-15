@@ -1,19 +1,109 @@
 const QuoteModel = require("../model/QuoteModel");
 const QuoteMeta = require("../model/QuoteMeta");
+const AuthorModel = require("../model/AuthorModel");
+const CategoryModel = require("../model/CategoryModel");
 
 exports.createQuote = async (req, res) => {
     try{
         const reqBody = req.body;
-        reqBody.userId = req.headers.userId;
-        const data = await QuoteModel.create(reqBody);
-        const meta = {
-            quoteId:data['_id'],
-            likes:reqBody.likes,
-            views:reqBody.views,
-            sharedCount:0
+        let quote = await QuoteModel.find({quote: reqBody.quote});
+        if(quote.length >0){
+            res.json({status:"duplicate", message:"Quote already exists. Please, try with new qoute."});
+        }else {
+            reqBody.userId = req.headers.userId;
+            const data = await QuoteModel.create(reqBody);
+            const meta = {
+                quoteId:data['_id'],
+            }
+            const quoteMeta = await QuoteMeta.create(meta);
+            res.json({status:"success", data:data, meta:quoteMeta});
         }
-        const quoteMeta = await QuoteMeta.create(meta);
-        res.json({status:"success", data:data, meta:quoteMeta});
+
+
+    }catch (e) {
+        res.json({status:"error", message:e.message});
+    }
+}
+
+
+
+
+exports.quoteList = async (req, res)=>{
+    try{
+        const joinWithCategory = {$lookup:{
+                from: "categories",
+                localField: "categoryId",
+                foreignField:"_id",
+                as: "category"
+            }};
+        const unWindCategory = {$unwind:"$category"};
+
+        const joinWithAuthor = {$lookup:{
+                from: "authors",
+                localField: "authorId",
+                foreignField:"_id",
+                as: "author"
+            }};
+        const unWindAuthor = {$unwind:"$author"};
+
+        const joinWithUser = {$lookup:{
+                from: "profiles",
+                localField: "userId",
+                foreignField:"userId",
+                as: "user"
+            }};
+        const unWindUser = {$unwind:"$user"};
+
+        const projection = {$project:{
+                'quote':1,
+                'status':1,
+                'categoryId':1,
+                'authorId':1,
+                'category.categoryName':1,
+                'author.name':1,
+                'user.userName':1,
+                'updatedAt':1,
+            }}
+
+        const data = await QuoteModel.aggregate([
+            joinWithCategory,
+            unWindCategory,
+            joinWithAuthor,
+            unWindAuthor,
+            joinWithUser,
+            unWindUser,
+            projection,
+            {$sort:{ updatedAt : -1 }}
+        ]);
+        return res.json({status:"success", data:data});
+    }catch (e) {
+        res.json({status:"error", message:e.message});
+    }
+}
+
+
+exports.updateQuote =  async (req, res) => {
+    try{
+        const {id} = req.params;
+        const reqBody = req.body;
+        let quote = await QuoteModel.find({quote: reqBody.quote, _id:{$ne:id}});
+        if(quote.length >0){
+            res.json({status:"duplicate", message:"Quote already exists"});
+        }else {
+            const data = await QuoteModel.updateOne({_id:id}, reqBody);
+            return res.json({status:"success", data:data});
+        }
+    }catch (e) {
+        res.json({status:"error", message:e.message});
+    }
+}
+
+
+exports.deleteQuote = async (req, res)=>{
+    try {
+        const {id} = req.params;
+        const data = await QuoteModel.deleteOne({_id:id});
+        res.json({status:"success", data:data});
     }catch (e) {
         res.json({status:"error", message:e.message});
     }

@@ -42,5 +42,8 @@ router.delete('/deleteAuthor/:id', AuthMiddleware, AuthorController.deleteAuthor
 
 // Quotes route
 router.post('/createQuote', AuthMiddleware, QuoteController.createQuote);
+router.get('/quoteList', QuoteController.quoteList);
+router.put('/updateQuote/:id',AuthMiddleware, QuoteController.updateQuote);
+router.delete('/deleteQuote/:id',AuthMiddleware, QuoteController.deleteQuote);
 
 module.exports = router;

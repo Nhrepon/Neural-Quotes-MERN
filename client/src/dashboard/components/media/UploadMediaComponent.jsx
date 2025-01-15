@@ -6,11 +6,13 @@ import {DeleteAlert} from "../../../utility/Utility.js";
 import {backendUrl} from "../../../../config.js";
 import imageCompression from "browser-image-compression";
 import MediaStore from "../../store/MediaStore.js";
+import CategoryStore from "../../store/CategoryStore.js";
 
 
 const UploadMediaComponent = () => {
     const {fileList, getFileList}=MediaStore();
     const [file, setFile] = useState( null);
+    const {getCategoryList, categoryList}=CategoryStore();
 
     const handleFileChange = (e) => {
         setFile([...e.target.files]);
@@ -26,6 +28,7 @@ const UploadMediaComponent = () => {
     useEffect(() => {
         (async ()=>{
             await getFileList();
+            await getCategoryList();
         })()
     }, []);
 
@@ -50,7 +53,7 @@ const UploadMediaComponent = () => {
 
     const uploadFile = async ()=>{
         let formData = new FormData();
-        const category = document.getElementById("category").value;
+        const categoryId = document.getElementById("categoryId").value;
         if (file!=null && file.length > 0){
 
             //files.forEach((file) => formData.append('file', file));
@@ -75,7 +78,7 @@ const UploadMediaComponent = () => {
 
                 // Append the compressed file to FormData
                 formData.append("file", compressedFile);
-                formData.append("category", category);
+                formData.append("categoryId", categoryId);
             }
 
 
@@ -131,9 +134,14 @@ const UploadMediaComponent = () => {
             <div className="row">
                 <div className="col-4 border-end vh-100">
                     <div className="card shadow-lg p-5 gap-4">
-                        <select name="category" id="category" className={"form-control"}>
-                            <option value="Romantic">Romantic</option>
-                            <option value="Couple">Couple</option>
+                        <select name="categoryId" id="categoryId" className={"form-control"}>
+                            {
+                                categoryList && categoryList.map((item)=>{
+                                    return (
+                                        <option value={item._id}>{item.categoryName}</option>
+                                    )
+                                })
+                            }
                         </select>
                         <input id={"file"} className="form-control" type="file" multiple accept="image/*" onChange={handleFileChange} name="file"/>
                         <button onClick={uploadFile} className="btn btn-success" type="submit">Upload Media</button>

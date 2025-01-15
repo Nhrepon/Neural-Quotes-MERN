@@ -62,7 +62,7 @@ const AuthorListComponents = () => {
                                         <td>{item.bio}</td>
                                         <td>{item.nationality}</td>
                                         <td>
-                                            <img src={item.profilePicture} alt={item.name} width={80}  crossOrigin={"anonymous"}/>
+                                            <img src={item.profilePicture} alt={item.name} width={80} crossOrigin={"anonymous"}/>
                                         </td>
                                         <td>
                                             <div className={"d-flex text-center"}>

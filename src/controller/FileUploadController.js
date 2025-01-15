@@ -4,6 +4,7 @@ const path = require('path');
 const FileModel = require("../model/FileModel");
 const fs = require('fs');
 const sharp = require("sharp");
+const QuoteModel = require("../model/QuoteModel");
 
 // const storage = multer.diskStorage({
 //     destination: function (req, file, cb) {
@@ -60,7 +61,7 @@ exports.fileUpload = async (req, res) => {
         try {
             const filePaths = await Promise.all(
                 req.files.map(async (file) => {
-                    const {category} = req.body;
+                    const {categoryId} = req.body;
                     // Convert image buffer to WebP format
                     const webpBuffer = await sharp(file.buffer)
                         .webp({ quality: 90 }) // Convert to WebP with 90% quality
@@ -75,7 +76,7 @@ exports.fileUpload = async (req, res) => {
 
                     const filePath = outputFilePath.replace(/\\/g, '/');
                     // Save the file path to the database
-                    return await FileModel.create({userId: req.headers.userId, filePath: filePath, category: category});
+                    return await FileModel.create({userId: req.headers.userId, filePath: filePath, categoryId: categoryId});
                 })
             );
 
@@ -96,7 +97,39 @@ exports.fileUpload = async (req, res) => {
 
 exports.fileLoad = async (req, res)=>{
     try {
-        const data =await FileModel.find().sort({ updatedAt : -1 });
+        const joinWithCategory = {$lookup:{
+                from: "categories",
+                localField: "categoryId",
+                foreignField:"_id",
+                as: "category"
+            }};
+        const unWindCategory = {$unwind:"$category"};
+
+        const joinWithUser = {$lookup:{
+                from: "profiles",
+                localField: "userId",
+                foreignField:"userId",
+                as: "user"
+            }};
+        const unWindUser = {$unwind:"$user"};
+
+        const projection = {$project:{
+                'filePath':1,
+                'category.categoryName':1,
+                'user.userName':1,
+                'createdAt':1,
+                'updatedAt':1,
+            }}
+
+        const data = await FileModel.aggregate([
+            joinWithCategory,
+            unWindCategory,
+            joinWithUser,
+            unWindUser,
+            projection,
+            {$sort:{ updatedAt : -1 }}
+        ]);
+
         res.json({status:"success", file:data});
     }catch (e) {
         res.json({status:"failed", message:e});
