@@ -8,7 +8,7 @@ const DashboardSidebar = () => {
     useEffect(()=>{
         (async ()=>{
             await getUserProfile();
-            console.log("user data: "+ userProfileForm);
+            //console.log("user data: "+ userProfileForm);
         })()
     },[]);
 

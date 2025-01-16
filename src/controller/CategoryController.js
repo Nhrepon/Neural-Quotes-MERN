@@ -1,5 +1,7 @@
 const CategoryModel = require("../model/CategoryModel");
 const {post} = require("axios");
+const FileModel = require("../model/FileModel");
+const QuoteModel = require("../model/QuoteModel");
 exports.createCategory = async (req, res)=> {
     try {
         const reqBody = req.body;
@@ -71,6 +73,14 @@ exports.updateCategory = async (req, res)=>{
 exports.deleteCategory = async (req, res)=>{
     try {
     const {categoryId} = req.params;
+    const refModel = [FileModel, QuoteModel];
+        for (const model of refModel) {
+            const isReferenced = await model.exists({ categoryId });
+            console.log(isReferenced);
+            if (isReferenced) {
+                res.json({status:"failed", message:"This category is referenced in another collection and cannot be deleted."});
+            }
+        }
     const data = await CategoryModel.deleteOne(categoryId);
     res.json({status:"success", data:data});
     }catch (e) {

@@ -2,9 +2,10 @@ import React, {useEffect, useState} from 'react';
 import AuthorStore from "../../store/AuthorStore.js";
 import {modalHide} from "../../../utility/Utility.js";
 import toast from "react-hot-toast";
+import MediaPicker from "../media/MediaPicker.jsx";
 
 const UpdateAuthorComponent = (props) => {
-    const {authorForm, authorFormOnChange, updateAuthor, getAuthorList} = AuthorStore();
+    const {updateAuthor, getAuthorList} = AuthorStore();
 
     const [form, setForm] = useState({
         name: "",
@@ -72,6 +73,7 @@ const UpdateAuthorComponent = (props) => {
                                        className="form-control"/>
                             </div>
                             <div className="form-group">
+                                <MediaPicker onInputChange={(filePath)=>{handleChange("profilePicture", filePath)}}/>
                                 <label htmlFor="profilePicture">Profile Picture</label>
                                 <input value={form.profilePicture} onChange={(e) => {
                                     handleChange("profilePicture", e.target.value)

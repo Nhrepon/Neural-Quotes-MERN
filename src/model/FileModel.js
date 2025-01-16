@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const databaseSchema = mongoose.Schema({
-    userId: {type:mongoose.Schema.Types.ObjectId, required:true},
+    userId: {type:mongoose.Schema.Types.ObjectId, required:true, ref:"UserModel"},
     categoryId: {type: mongoose.Schema.Types.ObjectId, ref:"CategoryModel"},
     filePath: {type: String, required: true},
 },

@@ -3,6 +3,7 @@ import AuthorStore from "../../store/AuthorStore.js";
 import toast from "react-hot-toast";
 
 import {modalHide} from "../../../utility/Utility.js";
+import MediaPicker from "../media/MediaPicker.jsx";
 
 const CreateAuthorComponent = () => {
     const {authorFormOnChange, authorForm, createAuthor, getAuthorList} = AuthorStore();
@@ -58,6 +59,7 @@ const CreateAuthorComponent = () => {
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="profilePicture">Profile Picture</label>
+
                                         <input value={authorForm.profilePicture} onChange={(e) => {
                                             authorFormOnChange("profilePicture", e.target.value)
                                         }} type="text" name="profilePicture" id="profilePicture"
