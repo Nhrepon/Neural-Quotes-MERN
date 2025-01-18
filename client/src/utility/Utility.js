@@ -40,6 +40,20 @@ export async  function DeleteAlert() {
     return result.isConfirmed;
 }
 
+export async  function DeleteAlertWithData(id, name) {
+    const result = await Swal.fire({
+        title: "Are you sure?",
+        text: "You won't be able to revert this! \nDelete? \nid: "+id+" \nname: "+name+" ",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "Yes, delete it!",
+        allowOutsideClick: false
+    });
+    return result.isConfirmed;
+}
+
 export async  function SuccessAlert(msg) {
     const result = await Swal.fire({
         text: msg,

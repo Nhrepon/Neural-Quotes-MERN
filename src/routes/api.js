@@ -5,6 +5,8 @@ const AuthMiddleware = require("../middleware/AuthMiddleware");
 const CategoryController = require("../controller/CategoryController");
 const QuoteController = require("../controller/QuoteController");
 const AuthorController = require("../controller/AuthorController");
+const AdminMiddleware = require("../middleware/AdminMiddleware");
+
 
 const router = express.Router();
 
@@ -19,7 +21,7 @@ router.put('/userProfileUpdate', AuthMiddleware, UserController.userProfileUpdat
 
 
 
-router.post('/fileUpload', AuthMiddleware, FileUploadController.fileUpload);
+router.post('/fileUpload', AdminMiddleware, FileUploadController.fileUpload);
 router.get('/fileLoad', FileUploadController.fileLoad);
 router.get('/singleFile/:id', FileUploadController.singleFile);
 router.delete('/fileDelete/:id', AuthMiddleware, FileUploadController.fileDelete);

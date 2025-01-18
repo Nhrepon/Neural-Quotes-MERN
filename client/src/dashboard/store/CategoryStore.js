@@ -25,6 +25,7 @@ const CategoryStore = create((set)=>({
     getCategoryList:async ()=>{
 
         try{
+            set({categoryList: null});
             const res =await axios.get("/api/categoryList");
             set({categoryList: res.data['data']});
             return res.data["status"] === "success";

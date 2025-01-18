@@ -17,7 +17,7 @@ const CategoryListComponents = () => {
                 await getCategoryList();
             }
         })()
-    },[categoryList])
+    },[])
 
 
     const onSubmit = async ()=>{

@@ -1,5 +1,5 @@
 const AuthorModel = require("../model/AuthorModel");
-const CategoryModel = require("../model/CategoryModel");
+const QuoteModel = require("../model/QuoteModel");
 
 exports.createAuthor = async (req, res) => {
     try{
@@ -52,8 +52,15 @@ exports.updateAuthor = async (req, res) => {
 exports.deleteAuthor = async (req, res) => {
     try{
         const {id} = req.params;
-        const data = await AuthorModel.deleteOne({_id: id});
-        res.json({status:"success", data: data});
+        const [quoteRef] = await Promise.all([
+            QuoteModel.find({authorId:id}),
+        ]);
+        if(quoteRef.length > 0 ){
+            res.json({status:"failed", message:"This file is referenced in another collection and cannot be deleted."});
+        }else {
+            const data = await AuthorModel.deleteOne({_id: id});
+            res.json({status: "success", data: data});
+        }
     }catch (e) {
         res.json({status:"error", message:e.message});
     }

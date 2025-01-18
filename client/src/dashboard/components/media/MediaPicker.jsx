@@ -10,9 +10,11 @@ const MediaPicker = ({onInputChange}) => {
 
     useEffect(() => {
         (async ()=>{
-            await getFileList();
+            if (!fileList){
+                await getFileList();
+            }
         })()
-    }, []);
+    }, [fileList]);
 
     // const onSubmit=async (filePath)=>{
     //     await onInputChange(filePath);

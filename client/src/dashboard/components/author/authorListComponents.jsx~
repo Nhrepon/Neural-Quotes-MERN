@@ -13,7 +13,7 @@ const AuthorListComponents = () => {
         (async ()=>{
             await getAuthorList();
         })()
-    }, []);
+    }, [authorList])
 
     const deleteItem = async (id)=>{
         if(await DeleteAlert()){

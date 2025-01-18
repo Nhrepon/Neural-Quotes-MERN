@@ -5,7 +5,7 @@ import Loader from "../../../components/Loader.jsx";
 
 const UserComponent = () => {
 
-  const {getUserProfile, userProfileForm, userProfileFormOnChange, userProfileUpdate } = UserStore();
+  const {user,getUserProfile, userProfileForm, userProfileFormOnChange, userProfileUpdate } = UserStore();
 
 
   useEffect( () => {
@@ -17,16 +17,16 @@ const UserComponent = () => {
 
   const saveProfileData = async()=>{
     const response = await userProfileUpdate(userProfileForm);
-    if(response){
+    if(response.status === "success"){
       toast.success("Profile updated successfully.");
       await getUserProfile();
     }else{
-      toast.error("Failed to update profile.");
+      toast.error(response.message);
     }
   }
 
 
-  if(userProfileForm === null){
+  if(user === null){
     return <div><Loader/></div>
   }else{
   return (
@@ -39,6 +39,9 @@ const UserComponent = () => {
       </div>
     
       <form>
+          <div className="form-group">
+              <span>User status: {user.role}</span>
+          </div>
         <div className="form-group row my-4">
           <label className="col-sm-2 col-form-label">User Name :</label>
           <div className="col-sm-10">

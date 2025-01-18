@@ -72,17 +72,18 @@ exports.updateCategory = async (req, res)=>{
 
 exports.deleteCategory = async (req, res)=>{
     try {
-    const {categoryId} = req.params;
-    const refModel = [FileModel, QuoteModel];
-        for (const model of refModel) {
-            const isReferenced = await model.exists({ categoryId });
-            console.log(isReferenced);
-            if (isReferenced) {
-                res.json({status:"failed", message:"This category is referenced in another collection and cannot be deleted."});
-            }
-        }
-    const data = await CategoryModel.deleteOne(categoryId);
-    res.json({status:"success", data:data});
+    const {id} = req.params;
+        const [quoteRef, categoryRef] = await Promise.all([
+            QuoteModel.find({categoryId:id}),
+            FileModel.find({categoryId:id}),
+        ])
+        if(quoteRef.length > 0 || categoryRef.length > 0){
+            res.json({status:"failed", message:"This file is referenced in another collection and cannot be deleted."});
+        }else{
+        const data = await CategoryModel.deleteOne({_id:id});
+        res.json({status:"success", data:data});
+    }
+
     }catch (e) {
         res.json({status:"error", message:e.message});
     }

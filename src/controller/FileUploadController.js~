@@ -156,12 +156,13 @@ exports.fileDelete = async (req, res)=>{
     try {
         const {id} = req.params;
         const file = await FileModel.findOne({_id:id});
-
         const [catRef, authRef] = await Promise.all([
-            CategoryModel.find({categoryImg:file.filePath}),
-            AuthorModel.find({profilePicture:file.filePath}),
+            CategoryModel.find({categoryImg:file.filePath});
+        AuthorModel.find({profilePicture:file.filePath});
         ])
-        if(catRef.length > 0 || authRef.length > 0){
+
+
+        if(fileRef.length > 0){
             res.json({status:"failed", message:"This file is referenced in another collection and cannot be deleted."});
         }else {
             const fileDirectory = path.join(__dirname, '../..', file.filePath);

@@ -6,7 +6,7 @@ import {modalHide} from "../../../utility/Utility.js";
 import CategoryStore from "../../store/CategoryStore.js";
 
 const UpdateCategoryComponent = ({data}) => {
-    const { getCategoryList, updateCategory}=CategoryStore();
+    const { categoryList, getCategoryList, updateCategory}=CategoryStore();
 
     const [form, setForm] = useState({
         categoryName:"",
@@ -24,7 +24,7 @@ const UpdateCategoryComponent = ({data}) => {
                 });
             }
         })()
-    }, []);
+    }, [categoryList]);
 
     const handleOnChange = (field, value) => {
         setForm({ ...form, [field]: value });
@@ -36,9 +36,9 @@ const UpdateCategoryComponent = ({data}) => {
     const onUpdate = async ()=>{
         const res = await updateCategory(data._id, form);
         if(res.status === "success"){
-            await getCategoryList();
-            toast.success("Category updated successfully.");
             await modalHide(`update-${data._id}`);
+            toast.success("Category updated successfully.");
+            await getCategoryList();
 
         }else if(res.status === "duplicate"){
             toast.error("Category name already exists!");
@@ -65,6 +65,9 @@ const UpdateCategoryComponent = ({data}) => {
                                     aria-label="Close"></button>
                         </div>
                         <div className="modal-body d-flex flex-column gap-2 text-start">
+                            <div className="corm-group">
+                                <span >Category Id: {data._id}</span>
+                            </div>
                             <div className="form-group">
                                 <label htmlFor="categoryName">Category Name</label>
                                 <input value={form.categoryName} onChange={(e) => {

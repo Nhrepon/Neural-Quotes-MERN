@@ -57,7 +57,7 @@ const UpdateAuthorComponent = (props) => {
                             <button type="button" className="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                         </div>
-                        <div className="modal-body">
+                        <div className="modal-body d-flex flex-column gap-3">
                             <div className="form-group">
                                 <label htmlFor="Name">Name</label>
                                 <input value={form.name} onChange={(e) => {
@@ -67,14 +67,16 @@ const UpdateAuthorComponent = (props) => {
                             </div>
                             <div className="form-group">
                                 <label htmlFor="bio">Bio</label>
-                                <input value={form.bio} onChange={(e) => {
+                                <textarea value={form.bio} onChange={(e) => {
                                     handleChange("bio", e.target.value)
-                                }} type="text" name="bio" id="bio"
+                                }} name="bio" id="bio"
                                        className="form-control"/>
                             </div>
                             <div className="form-group">
-                                <MediaPicker onInputChange={(filePath)=>{handleChange("profilePicture", filePath)}}/>
                                 <label htmlFor="profilePicture">Profile Picture</label>
+                                <MediaPicker onInputChange={(filePath) => {
+                                    handleChange("profilePicture", filePath)
+                                }}/>
                                 <input value={form.profilePicture} onChange={(e) => {
                                     handleChange("profilePicture", e.target.value)
                                 }} type="text" name="profilePicture" id="profilePicture"

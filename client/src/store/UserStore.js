@@ -79,12 +79,14 @@ const UserStore = create((set)=>({
             },
         }))
     },
+    user:null,
     getUserProfile: async ()=>{
         try {
             const profileData = await axios.get("/api/userProfileRead");
             
             if(profileData.data["status"] === "success"){
                 set({ userProfileForm: profileData.data['profile'] });
+                set({ user: profileData.data['user'] });
             }
 
         }catch (error) {

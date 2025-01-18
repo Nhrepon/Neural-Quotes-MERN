@@ -42,7 +42,7 @@ const CreateAuthorComponent = () => {
                                     <button type="button" className="btn-close" data-bs-dismiss="modal"
                                             aria-label="Close"></button>
                                 </div>
-                                <div className="modal-body">
+                                <div className="modal-body d-flex flex-column gap-3">
                                     <div className="form-group">
                                         <label htmlFor="Name">Name</label>
                                         <input value={authorForm.name} onChange={(e) => {
@@ -52,14 +52,14 @@ const CreateAuthorComponent = () => {
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="bio">Bio</label>
-                                        <input value={authorForm.bio} onChange={(e) => {
+                                        <textarea value={authorForm.bio} onChange={(e) => {
                                             authorFormOnChange("bio", e.target.value)
-                                        }} type="text" name="bio" id="bio"
+                                        }}  name="bio" id="bio"
                                                className="form-control"/>
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="profilePicture">Profile Picture</label>
-
+                                        <MediaPicker onInputChange={(filePath)=>{authorFormOnChange("profilePicture", filePath)}}/>
                                         <input value={authorForm.profilePicture} onChange={(e) => {
                                             authorFormOnChange("profilePicture", e.target.value)
                                         }} type="text" name="profilePicture" id="profilePicture"

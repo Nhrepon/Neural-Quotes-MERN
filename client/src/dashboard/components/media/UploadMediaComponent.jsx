@@ -44,7 +44,7 @@ const UploadMediaComponent = () => {
                 await getFileList();
                 toast.success(`${id} deleted successfully!`);
             }else {
-                toast.error(`${id} deleted failed! and message ${res.data.status}`);
+                toast.error(res.data.message);
             }
         }
 
@@ -106,7 +106,7 @@ const UploadMediaComponent = () => {
                     document.getElementById("file").value = "";
                     toast.success(`File upload success!`);
                 }else {
-                    toast.error(`File upload failed!`);
+                    toast.error(res.data.message);
                 }
 
             }catch (e) {
