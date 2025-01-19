@@ -39,7 +39,7 @@ const UpdateAuthorComponent = (props) => {
             toast.success("Author updated successfully!");
             await modalHide(`update-${props.data._id}`)
         } else {
-            toast.error("Failed to update author.");
+            toast.error(res.message);
         }
     }
     return (

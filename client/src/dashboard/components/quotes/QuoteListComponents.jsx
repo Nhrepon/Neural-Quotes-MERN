@@ -36,6 +36,9 @@ const QuoteListComponents = () => {
             if (res.status === "success"){
                 await getQuoteList();
                 toast.success("Quote created successfully.");
+                quoteForm.quote = "";
+                quoteForm.categoryId = "";
+                quoteForm.authorId = "";
             }else if(res.status === "duplicate"){
                 toast.error(res.message);
             }else {
@@ -48,11 +51,11 @@ const QuoteListComponents = () => {
     const deleteItem = async (id)=>{
         if(await DeleteAlert()){
             const res = await deleteQuote(id);
-            if(res){
+            if(res.status === "success"){
                 await getQuoteList();
                 toast.success("Quote deleted successfully!");
             }else {
-                toast.error("Quote deleted failed!");
+                toast.error(res.message);
             }
 
         }

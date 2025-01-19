@@ -35,7 +35,7 @@ const CategoryListComponents = () => {
             }else if(res.status === "duplicate"){
                 toast.error("Category name already exists!");
             }else {
-                toast.error("failed");
+                toast.error(res.message);
             }
         }
     }

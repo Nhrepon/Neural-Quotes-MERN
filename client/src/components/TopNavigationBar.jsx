@@ -38,7 +38,8 @@ const TopNavigationBar = () => {
 
     const navItem = [
         {to: '/', title: 'Home'},
-        {to: '/blog', title: 'Blog'},
+        {to: '/blogs', title: 'Blog'},
+        {to: '/quote', title: 'Quotes'},
         {to: '/about', title: 'About'},
         {to: '/contact', title: 'Contact'},
     ]

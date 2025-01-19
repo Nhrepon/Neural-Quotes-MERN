@@ -42,7 +42,8 @@ const UpdateQuoteComponent = (props) => {
             await getQuoteList();
             toast.success("Quote updated successfully!");
         } else {
-            toast.error("Failed to update quote.");
+            toast.error(res.message);
+            await modalHide(`update-${props.data._id}`);
         }
     }
     return (

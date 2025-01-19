@@ -1,7 +1,9 @@
 const CategoryModel = require("../model/CategoryModel");
-const {post} = require("axios");
 const FileModel = require("../model/FileModel");
 const QuoteModel = require("../model/QuoteModel");
+const {isAdmin} = require("../utility/ValidationUtility");
+
+
 exports.createCategory = async (req, res)=> {
     try {
         const reqBody = req.body;
@@ -9,9 +11,13 @@ exports.createCategory = async (req, res)=> {
         if(cat.length >0){
             res.json({status:"duplicate", message:"Category already exists"});
         }else {
-            reqBody.createdBy = req.headers.userId;
-            const data = await CategoryModel.create(reqBody);
-            return res.json({status:"success", data: data});
+            if(isAdmin(req.headers.token || req.cookies.token)){
+                reqBody.createdBy = req.headers.userId;
+                const data = await CategoryModel.create(reqBody);
+                return res.json({status:"success", data: data});
+            }else {
+                return res.json({status:"failed", message:"You are not authorized to process this operation!"});
+            }
         }
     }catch (e) {
         res.json({status:"error", message:e.message});
@@ -57,8 +63,12 @@ exports.updateCategory = async (req, res)=>{
         if(cat.length >0){
             res.json({status:"duplicate", message:"Category already exists"});
         }else {
-            const data = await CategoryModel.updateOne({_id:id}, reqBody);
-            return res.json({status:"success", data:data});
+            if(isAdmin(req.headers.token || req.cookies.token)){
+                const data = await CategoryModel.updateOne({_id:id}, reqBody);
+                return res.json({status:"success", data:data});
+            }else {
+                return res.json({status:"failed", message:"You are not authorized to process this operation!"});
+            }
         }
 
     }catch (e) {
@@ -78,10 +88,14 @@ exports.deleteCategory = async (req, res)=>{
             FileModel.find({categoryId:id}),
         ])
         if(quoteRef.length > 0 || categoryRef.length > 0){
-            res.json({status:"failed", message:"This file is referenced in another collection and cannot be deleted."});
+            res.json({status:"failed", message:"This category is referenced in another collection and cannot be deleted."});
         }else{
-        const data = await CategoryModel.deleteOne({_id:id});
-        res.json({status:"success", data:data});
+        if(isAdmin(req.headers.token || req.cookies.token)){
+            const data = await CategoryModel.deleteOne({_id:id});
+            res.json({status:"success", data:data});
+        }else {
+            return res.json({status:"failed", message:"You are not authorized to process this operation!"});
+        }
     }
 
     }catch (e) {

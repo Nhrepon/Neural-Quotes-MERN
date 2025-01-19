@@ -17,10 +17,15 @@ const CreateAuthorComponent = () => {
                 toast.success("Category successfully.");
                 await getAuthorList();
                 await modalHide("create");
+                authorForm.name = "";
+                authorForm.bio = "";
+                authorForm.profilePicture = "";
+                authorForm.nationality = "";
+
             }else if(res.status === "duplicate"){
                 toast.error(res.message);
             }else {
-                toast.error("failed");
+                toast.error(res.message);
             }
         }
     }

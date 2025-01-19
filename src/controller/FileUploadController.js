@@ -4,9 +4,9 @@ const path = require('path');
 const FileModel = require("../model/FileModel");
 const fs = require('fs');
 const sharp = require("sharp");
-const QuoteModel = require("../model/QuoteModel");
 const CategoryModel = require("../model/CategoryModel");
 const AuthorModel = require("../model/AuthorModel");
+const {isAdmin} = require("../utility/ValidationUtility");
 
 // const storage = multer.diskStorage({
 //     destination: function (req, file, cb) {
@@ -53,45 +53,119 @@ const upload = multer({
     limits: { fileSize: 5 * 1024 * 1024 }, // Limit file size to 5MB
 }).array('file', 12); // Allow up to 12 files
 
+
 // File upload controller
+// exports.fileUpload = async (req, res) => {
+//     upload(req, res, async (err) => {
+//         if (err) {
+//             return res.json({ status: "failed", message: err });
+//         }
+//
+//         try {
+//             const filePaths = await Promise.all(
+//                 req.files.map(async (file) => {
+//                     const {categoryId} = req.body;
+//                     // Convert image buffer to WebP format
+//                     const webpBuffer = await sharp(file.buffer)
+//                         .webp({ quality: 90 }) // Convert to WebP with 90% quality
+//                         .toBuffer();
+//
+//                     // Define the WebP file path
+//                     const outputFileName = `${file.fieldname}-${Date.now()}-${Math.round(Math.random() * 10000)}.webp`;
+//                     const outputFilePath = path.join('./uploads', outputFileName);
+//
+//                     // Write the WebP file to disk
+//                     fs.writeFileSync(outputFilePath, webpBuffer);
+//
+//                     const filePath = outputFilePath.replace(/\\/g, '/');
+//                     // Save the file path to the database
+//                     return await FileModel.create({userId: req.headers.userId, filePath: filePath, categoryId: categoryId});
+//                 })
+//             );
+//
+//             // Respond with success and file paths
+//             res.json({ status: 'success', path: filePaths });
+//         } catch (e) {
+//             console.error("Error processing files:", e);
+//             res.status(500).json({ status: "failed", message: "File processing failed" });
+//         }
+//     });
+// };
+
+
+
+
 exports.fileUpload = async (req, res) => {
     upload(req, res, async (err) => {
         if (err) {
             return res.json({ status: "failed", message: err });
         }
 
+        const uploadedFiles = [];
+        const savedFiles = [];
+
         try {
-            const filePaths = await Promise.all(
-                req.files.map(async (file) => {
-                    const {categoryId} = req.body;
-                    // Convert image buffer to WebP format
+            let {categoryId} = req.body;
+            if(Array.isArray(categoryId)){
+                categoryId = categoryId[0];
+            }
+            // Ensure upload directory exists
+            const uploadDir = './uploads';
+            if (!fs.existsSync(uploadDir)) {
+                fs.mkdirSync(uploadDir);
+            }
+
+            for(const file of req.files){
+                try {
+                    // Convert image buffer to WebP
                     const webpBuffer = await sharp(file.buffer)
                         .webp({ quality: 90 }) // Convert to WebP with 90% quality
                         .toBuffer();
 
-                    // Define the WebP file path
+                    // Define file name and path
                     const outputFileName = `${file.fieldname}-${Date.now()}-${Math.round(Math.random() * 10000)}.webp`;
-                    const outputFilePath = path.join('./uploads', outputFileName);
+                    const outputFilePath = path.join(uploadDir, outputFileName);
 
-                    // Write the WebP file to disk
+                    // Write WebP file to disk
                     fs.writeFileSync(outputFilePath, webpBuffer);
+                    uploadedFiles.push(outputFilePath);
 
                     const filePath = outputFilePath.replace(/\\/g, '/');
-                    // Save the file path to the database
-                    return await FileModel.create({userId: req.headers.userId, filePath: filePath, categoryId: categoryId});
-                })
-            );
+
+                    // Save file metadata to the database
+                    const savedFile = await FileModel.create({userId: req.headers.userId, filePath: filePath, categoryId: categoryId});
+                    savedFiles.push(savedFile);
+                } catch (fileError) {
+                    console.error(`Error processing file ${file.originalname}:`, fileError);
+                }
+            }
+
+            // Check if at least one file was successfully processed
+            if (savedFiles.length === 0) {
+                res.json({status:"failed", message:"No files were successfully processed"});
+            }
+
+            // Respond with success and saved files
+            res.json({ status: "success", path: savedFiles });
 
             // Respond with success and file paths
-            res.json({ status: 'success', path: filePaths });
+            // res.json({ status: 'success', path: filePaths });
         } catch (e) {
             console.error("Error processing files:", e);
+
+            // Cleanup: Remove files written to disk
+            for (const file of uploadedFiles) {
+                try {
+                    fs.unlinkSync(file); // Delete the file
+                } catch (unlinkErr) {
+                    console.error("Error deleting file:", unlinkErr);
+                }
+            }
+
             res.status(500).json({ status: "failed", message: "File processing failed" });
         }
     });
 };
-
-
 
 
 
@@ -164,17 +238,26 @@ exports.fileDelete = async (req, res)=>{
         if(catRef.length > 0 || authRef.length > 0){
             res.json({status:"failed", message:"This file is referenced in another collection and cannot be deleted."});
         }else {
-            const fileDirectory = path.join(__dirname, '../..', file.filePath);
-            if (file) {
-                fs.unlink(fileDirectory, (async (err) => {
-                    if (err){
-                        res.json({status:"error", message:err});
-                    } else {
-                        const data =await FileModel.deleteOne({_id: id});
-                        res.json({status:"success", data:data});
-                    }
-                }));
+            if(isAdmin(req.headers.token || req.cookies.token)){
+                const fileDirectory = path.join(__dirname, '../..', file.filePath);
+                if (file) {
+                    fs.unlink(fileDirectory, (async (err) => {
+                        if (err){
+                            res.json({status:"error", message:err});
+                        } else {
+                            const data =await FileModel.deleteOne({_id: id});
+                            res.json({status:"success", data:data});
+                        }
+                    }));
+                }
+            }else {
+                res.json({status:"failed", message:"You are not authorized to process this operation!"});
             }
+
+
+
+
+
         }
 
 

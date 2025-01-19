@@ -15,6 +15,7 @@ import UserPage from "./dashboard/page/UserPage.jsx";
 import CategoryPage from "./dashboard/page/CategoryPage.jsx";
 import QuotesPage from "./dashboard/page/QuotesPage.jsx";
 import AuthorPage from "./dashboard/page/AuthorPage.jsx";
+import QuotePage from "./page/QuotePage.jsx";
 
 
 
@@ -25,7 +26,8 @@ const App = () => {
         {path:'/', element:<HomePage/>},
         {path:'/about', element:<AboutPage/>},
         {path:'/contact', element:<ContactPage/>},
-        {path:'/blog', element:<BlogPage/>},
+        {path:'/blogs', element:<BlogPage/>},
+        {path:'/quote', element:<QuotePage/>},
         {path:'/login', element:<LoginPage/>},
         {path:"/registration",element:<RegistrationPage/>},
 

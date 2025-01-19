@@ -44,7 +44,6 @@ const UpdateCategoryComponent = ({data}) => {
             toast.error("Category name already exists!");
         }else {
             toast.error(res.message);
-            await modalHide(`update-${data._id}`);
         }
     }
 
