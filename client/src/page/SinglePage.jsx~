@@ -45,7 +45,6 @@ const SinglePage = () => {
                         file && (
                             <div>
                                 <p>Uploaded on: {file[0].category["categoryName"]}</p>
-                                <p>Uploaded By: {file[0].user["userName"]}</p>
                             </div>
                         )
                     }

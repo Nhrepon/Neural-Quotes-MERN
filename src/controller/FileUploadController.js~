@@ -245,14 +245,14 @@ exports.singleFile = async (req, res)=>{
                 'createdAt':1,
                 'updatedAt':1,
             }}
-        const data = await FileModel.aggregate([
+        const data = await FileModel.aggregate({
             matchStage,
             joinWithCategory,
             unWindCategory,
             joinWithUser,
             unWindUser,
             projection
-        ]);
+        });
         return res.json({status:"success", data:data});
     }catch (e) {
         res.json({status:"error", message:e.message});
