@@ -74,44 +74,47 @@ const UserComponent = () => {
           </div>
         </div>
 
-        <div className="form-group row my-4">
-          <label className="col-sm-2 col-form-label">Age :</label>
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className="form-control" placeholder="Age"
-              value={userProfileForm.age}
-              onChange={(e)=>{userProfileFormOnChange("age", e.target.value)}}
-            />
+          <div className="form-group row my-4">
+              <label className="col-sm-2 col-form-label">Age :</label>
+              <div className="col-sm-4">
+                  <input
+                      type="text"
+                      className="form-control" placeholder="Age"
+                      value={userProfileForm.age}
+                      onChange={(e) => {
+                          userProfileFormOnChange("age", e.target.value)
+                      }}
+                  />
+              </div>
+              <label className="col-sm-2 col-form-label">Gender :</label>
+              <div className="col-sm-4">
+                  <select className="form-control" value={userProfileForm.gender} onChange={(e) => {
+                      userProfileFormOnChange("gender", e.target.value)
+                  }}>
+
+                      <option value="">Choose gender</option>
+                      <option value="Male">Male</option>
+                      <option value="female">Female</option>
+                      <option value="transgender">Transgender</option>
+                  </select>
+              </div>
           </div>
-        </div>
 
-        <div className="form-group row my-4">
-            <label className="col-sm-2 col-form-label">Gender :</label>
-            <div className="col-sm-10">
-                <select className="form-control" value={userProfileForm.gender} onChange={(e)=>{userProfileFormOnChange("gender", e.target.value)}}>
-                    
-                    <option value="">Choose gender</option>
-                    <option value="Male">Male</option>
-                    <option value="female">Female</option>
-                    <option value="transgender">Transgender</option>
-                </select>
-            </div>
-        </div>
-
-        <div className="form-group row my-4">
-          <label className="col-sm-2 col-form-label">Mobile :</label>
-          <div className="col-sm-10">
-            <input
-              type="text"
-              className="form-control" placeholder="Mobile"
-              value={userProfileForm.userMobile}
-              onChange={(e)=>{userProfileFormOnChange("userMobile", e.target.value)}}
-            />
+          <div className="form-group row my-4">
+              <label className="col-sm-2 col-form-label">Mobile :</label>
+              <div className="col-sm-10">
+                  <input
+                      type="text"
+                      className="form-control" placeholder="Mobile"
+                      value={userProfileForm.userMobile}
+                      onChange={(e) => {
+                          userProfileFormOnChange("userMobile", e.target.value)
+                      }}
+                  />
+              </div>
           </div>
-        </div>
 
-        <div className="form-group row my-4">
+          <div className="form-group row my-4">
           <label className="col-sm-2 col-form-label">Address :</label>
           <div className="col-sm-10">
             <input

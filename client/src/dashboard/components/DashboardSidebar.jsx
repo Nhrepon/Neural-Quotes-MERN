@@ -5,12 +5,12 @@ import UserStore from "../../store/UserStore.js";
 const DashboardSidebar = () => {
 
     const {userLogout, getUserProfile, userProfileForm} = UserStore();
-    useEffect(()=>{
-        (async ()=>{
+    useEffect(() => {
+        (async () => {
             await getUserProfile();
             //console.log("user data: "+ userProfileForm);
         })()
-    },[]);
+    }, []);
 
     const handleLogout = async () => {
         await userLogout();
@@ -23,15 +23,12 @@ const DashboardSidebar = () => {
 
         <div className="sidebar position-sticky top-0 min-vh-100">
             <h2 className="text-light text-center mt-2">
-            <i className="bi bi-speedometer me-2"></i>
-            <Link to="/dashboard" className="d-none d-sm-inline-block fs-2 nav-link">Dashboard</Link>
+                <i className="bi bi-speedometer me-2"></i>
+                <Link to="/dashboard" className="d-none d-sm-inline-block fs-2 nav-link">Dashboard</Link>
             </h2>
             <hr/>
 
-            <ul
-                className="list-unstyled"
-                id="menu"
-            >
+            <ul className="list-unstyled" id="menu">
                 <li className="nav-item bg-light p-1 p-sm-2 rounded my-2 d-flex">
                     <Link to="/" className="nav-link">
                         <i className="bi-house-fill"></i>
@@ -138,7 +135,7 @@ const DashboardSidebar = () => {
                 <a href="#"
                    className="d-flex text-wrap align-items-center link-dark text-decoration-none dropdown-toggle"
                    id="dropdownUser2" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="./user.svg" alt="home" width="32" height="32"
+                    <img src="./user.svg" alt="home" width="32" height="32"
                          className="rounded-circle me-2"/>
                     <strong>{userProfileForm?.userName || "Guest"}</strong>
                 </a>

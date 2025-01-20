@@ -32,14 +32,15 @@ const AuthorListComponents = () => {
     return (
         <div className="container">
             <div className="row">
-                <div className="col-12 d-flex justify-content-between align-items-center">
+                <div className="col-12 d-flex justify-content-center position-relative mt-3">
                     <h2>Author</h2>
-                    <div>
+                    <div className="position-absolute start-0 ms-2 mt-2">
                         <CreateAuthorComponent/>
                     </div>
                 </div>
 
             </div>
+            <hr/>
             <div className="row">
                 <div className="col-12">
                     <table className="table table-striped">
@@ -63,7 +64,7 @@ const AuthorListComponents = () => {
                                         <td>{item.bio}</td>
                                         <td>{item.nationality}</td>
                                         <td>
-                                            <img src={backendUrl+item.profilePicture} alt={item.name} width={80} crossOrigin={"anonymous"}/>
+                                            <img src={backendUrl+item.profilePicture} alt={item.name} width={120} height={90} crossOrigin={"anonymous"}/>
                                         </td>
                                         <td>
                                             <div className={"d-flex text-center"}>

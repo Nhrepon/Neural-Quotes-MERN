@@ -29,7 +29,7 @@ const SinglePage = () => {
     return <MasterLayout>
         <div className="container">
             <div className="row">
-                <div className="col-sm-6">
+                <div className="col-sm-4">
                     {
                         file && file.length > 0 && (
                             <div className="card my-2">
@@ -39,7 +39,7 @@ const SinglePage = () => {
                         )
                     }
                 </div>
-                <div className="col-sm-6">
+                <div className="col-sm-4">
                     <h2>image details</h2>
                     {
                         file && (
@@ -49,6 +49,9 @@ const SinglePage = () => {
                             </div>
                         )
                     }
+                </div>
+                <div className="col-sm-4">
+                    <h3>Load similar</h3>
                 </div>
             </div>
         </div>

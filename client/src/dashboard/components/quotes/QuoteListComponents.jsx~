@@ -78,7 +78,7 @@ const QuoteListComponents = () => {
                 <div className="col-sm-4">
                     <div className="card p-3 d-flex flex-column gap-2 shadow">
                         <div>
-                            <h3 className="fs-4">Add new quote</h3>
+                            <h3 className="fs-3">Add new quote</h3>
                         </div>
                         <div className="form-group">
                             <label htmlFor="quote">Quote</label>
