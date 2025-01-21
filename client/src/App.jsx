@@ -16,6 +16,7 @@ import CategoryPage from "./dashboard/page/CategoryPage.jsx";
 import QuotesPage from "./dashboard/page/QuotesPage.jsx";
 import AuthorPage from "./dashboard/page/AuthorPage.jsx";
 import QuotePage from "./page/QuotePage.jsx";
+import SingleQuotePage from "./page/SingleQuotePage.jsx";
 
 
 
@@ -28,6 +29,7 @@ const App = () => {
         {path:'/contact', element:<ContactPage/>},
         {path:'/blogs', element:<BlogPage/>},
         {path:'/quote', element:<QuotePage/>},
+        {path:'/quote/:id', element:<SingleQuotePage/>},
         {path:'/login', element:<LoginPage/>},
         {path:"/registration",element:<RegistrationPage/>},
 

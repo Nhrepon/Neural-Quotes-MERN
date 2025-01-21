@@ -83,6 +83,18 @@ exports.quoteList = async (req, res)=>{
 }
 
 
+
+exports.singleQuote = async (req, res)=>{
+    try{
+        const {id} = req.params;
+        const data = await QuoteModel.find({_id:id});
+        res.json({status:"success", data:data});
+    }catch (e) {
+        res.json({status:"error", message:e.message});
+    }
+}
+
+
 exports.updateQuote =  async (req, res) => {
     try{
         const {role,userId} = req.headers;
