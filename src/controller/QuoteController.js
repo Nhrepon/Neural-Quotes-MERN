@@ -2,6 +2,9 @@ const QuoteModel = require("../model/QuoteModel");
 const QuoteMeta = require("../model/QuoteMeta");
 const AuthorModel = require("../model/AuthorModel");
 const CategoryModel = require("../model/CategoryModel");
+const FileModel = require("../model/FileModel");
+const mongoose = require("mongoose");
+const ObjectId = mongoose.Types.ObjectId;
 
 exports.createQuote = async (req, res) => {
     try{
@@ -86,9 +89,73 @@ exports.quoteList = async (req, res)=>{
 
 exports.singleQuote = async (req, res)=>{
     try{
-        const {id} = req.params;
-        const data = await QuoteModel.find({_id:id});
-        res.json({status:"success", data:data});
+        const id = new ObjectId(req.params.id);
+
+        const matchStage = {$match:{_id:id}};
+
+        const joinWithCategory = {$lookup:{
+                from: "categories",
+                localField: "categoryId",
+                foreignField:"_id",
+                as: "category"
+            }};
+        const unWindCategory = {$unwind:"$category"};
+
+        const joinWithAuthor = {$lookup:{
+                from: "authors",
+                localField: "authorId",
+                foreignField:"_id",
+                as: "author"
+            }};
+        const unWindAuthor = {$unwind:"$author"};
+
+        const joinWithUser = {$lookup:{
+                from: "profiles",
+                localField: "userId",
+                foreignField:"userId",
+                as: "user"
+            }};
+        const unWindUser = {$unwind:"$user"};
+
+        const projection = {$project:{
+                'quote':1,
+                'status':1,
+                'categoryId':1,
+                'authorId':1,
+                'userId':1,
+                'category.categoryName':1,
+                'author.name':1,
+                'user.userName':1,
+                'updatedAt':1,
+            }}
+
+        const data = await QuoteModel.aggregate([
+            matchStage,
+            joinWithCategory,
+            unWindCategory,
+            joinWithAuthor,
+            unWindAuthor,
+            joinWithUser,
+            unWindUser,
+            projection
+        ]);
+
+        // const img = await FileModel.find({categoryId:data[0].categoryId}, {filePath:1})
+        //     .sort({ $rand: Math.random() })
+        //     .limit(1);
+
+        let img = await FileModel.aggregate([
+            { $match: { categoryId: data[0].categoryId } },
+            { $project: { filePath: 1 } },
+            { $sample: { size: 1 } }
+        ]);
+        if(0 === img.length){
+            img = await FileModel.aggregate([
+                { $project: { filePath: 1 } },
+                { $sample: { size: 1 } }
+            ]);
+        }
+        res.json({status:"success", data:data, image:img});
     }catch (e) {
         res.json({status:"error", message:e.message});
     }
