@@ -27,6 +27,11 @@ exports.createCategory = async (req, res)=> {
 
 exports.categoryList = async (req, res)=>{
     try{
+        let pageNo = Number(req.params.pageNo);
+        let perPage = Number(req.params.perPage);
+        let keyword = req.params.keyword || "0";
+        let skip = (pageNo-1)*perPage;
+
         const joinWithUser = {$lookup:{
                 from: "profiles",
                 localField: "createdBy",
@@ -41,19 +46,66 @@ exports.categoryList = async (req, res)=>{
                 'createdAt':1,
                 'updatedAt':1,
                 'user.userName':1,
-            }}
+            }};
 
-        const data = await CategoryModel.aggregate([
-            joinWithUser,
-            unWindUser,
-            projection,
-            {$sort:{ updatedAt : -1 }}
-        ]);
-        return res.json({status:"success", data:data});
+        let data;
+        let searchQuery;
+        if(keyword !== "0"){
+            let searchRegex = {"$regex":keyword, "$options":"i"};
+            searchQuery = {$or:[{categoryName:searchRegex}, {categoryDesc:searchRegex}]};
+
+            data = await CategoryModel.aggregate([
+
+                {
+                    $facet:{
+                        total:[{$count:"total"}],
+                        data:[
+                            joinWithUser,
+                            unWindUser,
+                            projection,
+                            {$match:searchQuery},
+                            {$sort:{ updatedAt : -1 }},
+                            {$skip:skip},
+                            {$limit:perPage},
+                        ]
+                    }
+                }
+
+                // {$facet:{
+                // Total:[{$match:searchQuery}, {$count:"total"}],
+                //     Rows:[{$match:searchQuery},{$skip:skip}, {$limit:perPage}],
+                // }},
+
+
+                //{$count:"total"},
+
+            ]);
+
+        }else{
+            data = await CategoryModel.aggregate([
+                {
+                    $facet:{
+                        total:[{$count:"total"}],
+                        data:[
+                            joinWithUser,
+                            unWindUser,
+                            projection,
+                            {$sort:{ updatedAt : -1 }},
+                            {$skip:skip},
+                            {$limit:perPage},
+                        ]
+                    }
+                }
+
+            ]);
+        }
+        return res.json({status:"success", total:data[0].total[0].total, load:data[0].data.length, data:data[0].data});
     }catch (e) {
         res.json({status:"error", message:e.message});
     }
 }
+
+
 
 exports.updateCategory = async (req, res)=>{
     try {
@@ -75,8 +127,6 @@ exports.updateCategory = async (req, res)=>{
         res.json({status:"error", message:e.message});
     }
 }
-
-
 
 
 

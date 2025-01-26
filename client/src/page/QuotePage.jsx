@@ -7,6 +7,14 @@ const QuotePage = () => {
 
     return (
         <MasterLayout>
+            <div className="container">
+                <div className="row">
+                    <div className="col-12">
+                        <h2 className="fs-2 fw-bold text-center mt-3">Quote</h2>
+                        <hr/>
+                    </div>
+                </div>
+            </div>
             <QuoteListComponent/>
         </MasterLayout>
     );

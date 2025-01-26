@@ -11,7 +11,7 @@ import CreateAuthorComponent from "../author/CreateAuthorComponent.jsx";
 
 const CategoryListComponents = () => {
 
-    const {getCategoryList, categoryList,deleteCategory}=CategoryStore();
+    const {createCategory, categoryForm, categoryFormOnChange, getCategoryList, categoryList,deleteCategory}=CategoryStore();
 
     useEffect(()=>{
         (async ()=>{
@@ -19,7 +19,7 @@ const CategoryListComponents = () => {
                 await getCategoryList();
             }
         })()
-    },[]);
+    },[categoryList])
 
 
 

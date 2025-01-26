@@ -3,6 +3,7 @@ import AuthorStore from "../../store/AuthorStore.js";
 import {modalHide} from "../../../utility/Utility.js";
 import toast from "react-hot-toast";
 import MediaPicker from "../media/MediaPicker.jsx";
+import {backendUrl} from "../../../../config.js";
 
 const UpdateAuthorComponent = (props) => {
     const {updateAuthor, getAuthorList} = AuthorStore();
@@ -35,9 +36,10 @@ const UpdateAuthorComponent = (props) => {
     const onUpdate =async ()=>{
         const res = await updateAuthor(props.data._id, form);
         if (res.status === "success") {
+            await modalHide(`update-${props.data._id}`);
             await getAuthorList();
             toast.success("Author updated successfully!");
-            await modalHide(`update-${props.data._id}`)
+
         } else {
             toast.error(res.message);
         }
@@ -81,6 +83,14 @@ const UpdateAuthorComponent = (props) => {
                                     handleChange("profilePicture", e.target.value)
                                 }} type="text" name="profilePicture" id="profilePicture"
                                        className="form-control"/>
+                                {
+                                    form.profilePicture && (
+                                        <div className="d-flex justify-content-center align-items-center">
+                                            <img className="rounded" src={backendUrl + form.profilePicture} alt={form.name}
+                                                 crossOrigin={"anonymous"} width={80}/>
+                                        </div>
+                                    )
+                                }
                             </div>
                             <div className="form-group">
                                 <label htmlFor="nationality">Nationality</label>

@@ -4,7 +4,6 @@ import axios from "axios";
 import {backendUrl} from "../../../config.js";
 import {toPng} from "html-to-image";
 import toast from "react-hot-toast";
-import QuoteListComponent from "./QuoteListComponent.jsx";
 
 const SingleQuote = () => {
     const {id}=useParams();
@@ -80,13 +79,10 @@ const SingleQuote = () => {
             )
         }
     </div>
-    <div className="col-sm-3">
+    <div className="col-sm-4">
         <i className="bi bi-download"
            onClick={downloadImage}
            style={{cursor: "pointer"}} title="Download"></i>
-    </div>
-    <div className="col-sm-6">
-        <QuoteListComponent/>
     </div>
 </div>
         </div>
