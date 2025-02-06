@@ -22,10 +22,10 @@ const DashboardSidebar = () => {
     return (
 
         <div className="sidebar position-sticky top-0 min-vh-100">
-            <h2 className="text-light text-center mt-2">
+            <div className="text-light text-center mt-2 fs-3">
                 <i className="bi bi-speedometer me-2"></i>
-                <Link to="/dashboard" className="d-none d-sm-inline-block fs-2 nav-link">Dashboard</Link>
-            </h2>
+                <Link to="/dashboard" className="d-none d-sm-inline-block nav-link">Dashboard</Link>
+            </div>
             <hr/>
 
             <ul className="list-unstyled" id="menu">

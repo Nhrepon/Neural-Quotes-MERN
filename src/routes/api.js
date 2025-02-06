@@ -30,7 +30,7 @@ router.delete('/fileDelete/:id', AuthMiddleware, FileUploadController.fileDelete
 
 // Category route
 router.post('/createCategory', AuthMiddleware, CategoryController.createCategory);
-//router.get('/categoryList', CategoryController.categoryList);
+router.get('/categoryList', CategoryController.categoryList);
 router.get('/categoryList/:pageNo/:perPage/:keyword', CategoryController.categoryList);
 router.put('/updateCategory/:id', CategoryController.updateCategory);
 router.delete('/deleteCategory/:id',AuthMiddleware, CategoryController.deleteCategory);

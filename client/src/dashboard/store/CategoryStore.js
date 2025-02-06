@@ -22,12 +22,13 @@ const CategoryStore = create((set)=>({
         }
     },
     categoryList:null,
-    getCategoryList:async ()=>{
-
+    totalCategory:0,
+    getCategoryList:async (pageNo=1, perPage=10, keyword=0)=>{
         try{
             set({categoryList: null});
-            const res =await axios.get("/api/categoryList/1/10/0");
+            const res =await axios.get(`/api/categoryList/${pageNo}/${perPage}/${keyword}`);
             set({categoryList: res.data['data']});
+            set({totalCategory: res.data['total']});
             return res.data["status"] === "success";
         }catch (e) {
             return {status:"error", message:e.message};

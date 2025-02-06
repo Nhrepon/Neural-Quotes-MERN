@@ -1,35 +1,44 @@
 import React, {useEffect, useState} from 'react';
 import CategoryStore from "../../store/CategoryStore.js";
 import toast from "react-hot-toast";
-import {DeleteAlert, DeleteAlertWithData, modalHide} from "../../../utility/Utility.js";
-import MediaPicker from "../media/MediaPicker.jsx";
+import {DeleteAlertWithData} from "../../../utility/Utility.js";
 import {backendUrl} from "../../../../config.js";
 import UpdateCategoryComponent from "./UpdateCategoryComponent.jsx";
 import CreateCategoryComponent from "./CreateCategoryComponent.jsx";
-import CreateAuthorComponent from "../author/CreateAuthorComponent.jsx";
+import ReactPaginate from "react-paginate";
 
 
 const CategoryListComponents = () => {
 
-    const {getCategoryList, categoryList,deleteCategory}=CategoryStore();
+    const {getCategoryList, totalCategory, categoryList, deleteCategory} = CategoryStore();
 
-    useEffect(()=>{
-        (async ()=>{
-            if (!categoryList){
-                await getCategoryList();
-            }
+    let [perPage, setPerPage] = useState(5);
+    let [search, setSearch] = useState(0);
+
+    useEffect(() => {
+        (async () => {
+            await getCategoryList(1, perPage, search);
         })()
-    },[]);
+    }, [perPage, search]);
+
+    const handleOnChange = async (event) => {
+        const selectedPerPage = parseInt(event.target.value);
+        setPerPage(selectedPerPage);
+        await getCategoryList(1, selectedPerPage, search);
+    };
+
+    const handlePageClick = async (event) => {
+        await getCategoryList(event.selected + 1, perPage, search);
+    };
 
 
-
-    const deleteItem = async (item)=>{
-        if(await DeleteAlertWithData(item._id, item.categoryName)){
+    const deleteItem = async (item) => {
+        if (await DeleteAlertWithData(item._id, item.categoryName)) {
             const res = await deleteCategory(item._id);
-            if(res.status === "success"){
+            if (res.status === "success") {
                 await getCategoryList();
                 toast.success("Category deleted successfully!");
-            }else {
+            } else {
                 toast.error(res.message);
             }
 
@@ -43,8 +52,19 @@ const CategoryListComponents = () => {
             <div className="row">
                 <div className="col-12 d-flex justify-content-center position-relative mt-3">
                     <h2>Categories</h2>
-                    <div className="position-absolute start-0 ms-2 mt-2">
+                    <div className="position-absolute start-0 ms-2 ">
                         <CreateCategoryComponent/>
+                    </div>
+                    <div className="end-0 position-absolute">
+                        <div className="form-group">
+                            <select onChange={handleOnChange} value={perPage.toString()} className="form-select form-control">
+                                <option value="5">5 per page</option>
+                                <option value="10">10 per page</option>
+                                <option value="25">25 per page</option>
+                                <option value="50">50 per page</option>
+                                <option value="100">100 per page</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -121,6 +141,31 @@ const CategoryListComponents = () => {
                         </div>
                     </div>
             }
+            <div className="row my-5">
+                <div className="col-12 d-flex justify-content-center">
+                    <nav aria-label="Page navigation example">
+                        <ReactPaginate
+                            previousLabel="<"
+                            nextLabel=">"
+                            pageClassName="page-item"
+                            pageLinkClassName="page-link"
+                            previousClassName="page-item"
+                            previousLinkClassName="page-link"
+                            nextClassName="page-item"
+                            nextLinkClassName="page-link"
+                            breakLabel="..."
+                            breakClassName="page-item"
+                            breakLinkClassName="page-link"
+                            pageCount={totalCategory / perPage}
+                            marginPagesDisplayed={2}
+                            pageRangeDisplayed={5}
+                            onPageChange={handlePageClick}
+                            containerClassName="pagination"
+                            activeClassName="active"
+                        />
+                    </nav>
+                </div>
+            </div>
         </div>
     );
 };
