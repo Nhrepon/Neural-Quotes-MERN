@@ -28,7 +28,7 @@ const UploadMediaComponent = () => {
     useEffect(() => {
         (async ()=>{
             await getFileList();
-            await getCategoryList();
+            await getCategoryList(1, 1000, 0);
         })()
     }, []);
 

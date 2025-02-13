@@ -23,7 +23,7 @@ const CategoryStore = create((set)=>({
     },
     categoryList:null,
     totalCategory:0,
-    getCategoryList:async (pageNo=1, perPage=10, keyword=0)=>{
+    getCategoryList:async (pageNo, perPage, keyword)=>{
         try{
             set({categoryList: null});
             const res =await axios.get(`/api/categoryList/${pageNo}/${perPage}/${keyword}`);

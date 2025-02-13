@@ -27,9 +27,9 @@ exports.createCategory = async (req, res)=> {
 
 exports.categoryList = async (req, res)=>{
     try{
-        let pageNo = Number(req.params.pageNo || 1);
-        let perPage = Number(req.params.perPage || 10);
-        let keyword = req.params.keyword || "0";
+        let pageNo = Number(req.params.pageNo);
+        let perPage = Number(req.params.perPage);
+        let keyword = req.params.keyword;
         let skip = (pageNo-1)*perPage;
 
         const joinWithUser = {$lookup:{

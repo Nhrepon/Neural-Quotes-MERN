@@ -17,7 +17,7 @@ const QuoteListComponents = () => {
     useEffect(() => {
         (async () => {
             if (!categoryList) {
-                await getCategoryList();
+                await getCategoryList(1, 1000, 0);
             }
             if (!authorList) {
                 await getAuthorList();

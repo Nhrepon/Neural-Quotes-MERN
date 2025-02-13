@@ -5,5 +5,5 @@ const databaseSchema = mongoose.Schema({
     views: {type: Number, default: 0},
     sharedCount: {type: Number, default: 0},
 }, {timestamps: true, versionKey: false});
-const QuoteMeta = mongoose.model('QuoteMeta', databaseSchema);
+const QuoteMeta = mongoose.model('QuoteMetas', databaseSchema);
 module.exports = QuoteMeta;

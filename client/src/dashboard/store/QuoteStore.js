@@ -1,4 +1,4 @@
-import React from 'react';
+
 import {create} from "zustand";
 import axios from "axios";
 
@@ -27,6 +27,32 @@ const QuoteStore = create((set)=>({
             const res =await axios.get("/api/quoteList");
             set({quoteList: res.data['data']});
             return res.data["status"] === "success";
+        }catch (e) {
+            return {status:"error", message:e.message};
+        }
+    },
+    singleQuote: null,
+    getSingleQuote:async (id)=>{
+        try{
+            set({singleQuote: null});
+            const res = await axios.get("/api/singleQuote/"+id);
+            // if (res.data.status === "success") {
+            //     set({singleQuote: res.data});
+            // }
+            set({singleQuote: res.data});
+            return res.data["status"] === "success";
+        }catch (e) {
+            return {status:"error", message:e.message};
+        }
+    },
+    quoteMeta:async (id, sharedCount, likes)=>{
+        try{
+            const metaData = {
+                sharedCount:sharedCount,
+                likes:likes
+            }
+            const res =await axios.put("/api/quoteMeta/"+id, metaData);
+            return res.data;
         }catch (e) {
             return {status:"error", message:e.message};
         }

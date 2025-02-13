@@ -19,7 +19,7 @@ const CategoryListComponents = () => {
         (async () => {
             await getCategoryList(1, perPage, search);
         })()
-    }, [perPage, search]);
+    }, []);
 
     const handleOnChange = async (event) => {
         const selectedPerPage = parseInt(event.target.value);
@@ -36,7 +36,7 @@ const CategoryListComponents = () => {
         if (await DeleteAlertWithData(item._id, item.categoryName)) {
             const res = await deleteCategory(item._id);
             if (res.status === "success") {
-                await getCategoryList();
+                await getCategoryList(1, perPage, search);
                 toast.success("Category deleted successfully!");
             } else {
                 toast.error(res.message);
@@ -57,7 +57,7 @@ const CategoryListComponents = () => {
                     </div>
                     <div className="end-0 position-absolute">
                         <div className="form-group">
-                            <select onChange={handleOnChange} value={perPage.toString()} className="form-select form-control">
+                            <select onChange={(e)=>handleOnChange(e)} value={perPage.toString()} className="form-select form-control">
                                 <option value="5">5 per page</option>
                                 <option value="10">10 per page</option>
                                 <option value="25">25 per page</option>
@@ -159,9 +159,10 @@ const CategoryListComponents = () => {
                             pageCount={totalCategory / perPage}
                             marginPagesDisplayed={2}
                             pageRangeDisplayed={5}
-                            onPageChange={handlePageClick}
+                            onPageChange={(e)=>handlePageClick(e)}
                             containerClassName="pagination"
                             activeClassName="active"
+                            initialPage={1}
                         />
                     </nav>
                 </div>

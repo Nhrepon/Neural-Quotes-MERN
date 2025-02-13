@@ -38,7 +38,7 @@ const UpdateCategoryComponent = ({data}) => {
         if(res.status === "success"){
             await modalHide(`update-${data._id}`);
             toast.success("Category updated successfully.");
-            await getCategoryList();
+            await getCategoryList(1, 1000, 0);
 
         }else if(res.status === "duplicate"){
             toast.error("Category name already exists!");

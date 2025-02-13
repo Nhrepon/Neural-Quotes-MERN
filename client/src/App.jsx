@@ -51,7 +51,7 @@ const App = () => {
     const routes = isLogedin? [...protectedRoutes, ...commonRuotes]:[...commonRuotes];
 
     return (
-        <BrowserRouter>
+        <BrowserRouter future={{ v7_startTransition: true }}>
             <Routes>
                 {
                     routes.map(({path, element}, index)=>(

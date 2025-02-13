@@ -12,10 +12,10 @@ const CreateCategoryComponent = () => {
     useEffect(()=>{
         (async ()=>{
             if (!categoryList){
-                await getCategoryList();
+                await getCategoryList(1, 1000, 0);
             }
         })()
-    },[categoryList])
+    },[])
 
     const onSubmit = async ()=>{
         if(categoryForm.categoryName === ""){
@@ -27,7 +27,7 @@ const CreateCategoryComponent = () => {
                 categoryForm.categoryDesc = "";
                 categoryForm.categoryImg = "";
                 await modalHide("create");
-                await getCategoryList();
+                await getCategoryList(1, 1000, 0);
                 toast.success("Category successfully.");
             }else if(res.status === "duplicate"){
                 toast.error("Category name already exists!");

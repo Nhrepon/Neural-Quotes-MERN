@@ -47,6 +47,7 @@ router.delete('/deleteAuthor/:id', AuthMiddleware, AuthorController.deleteAuthor
 router.post('/createQuote', AuthMiddleware, QuoteController.createQuote);
 router.get('/quoteList', QuoteController.quoteList);
 router.get('/singleQuote/:id', QuoteController.singleQuote);
+router.put('/quoteMeta/:id', QuoteController.quoteMeta);
 router.put('/updateQuote/:id',AuthMiddleware, QuoteController.updateQuote);
 router.delete('/deleteQuote/:id',AuthMiddleware, QuoteController.deleteQuote);
 

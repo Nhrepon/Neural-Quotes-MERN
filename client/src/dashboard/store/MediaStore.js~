@@ -7,7 +7,6 @@ const MediaStore = create((set)=>({
 
     fileList:null,
     getFileList: async ()=>{
-        set({fileList: null});
         const res = await axios.get("api/fileLoad");
         set({fileList:res.data['file']});
         return res.data['status'] === "success";

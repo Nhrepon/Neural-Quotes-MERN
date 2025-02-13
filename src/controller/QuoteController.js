@@ -1,7 +1,5 @@
 const QuoteModel = require("../model/QuoteModel");
 const QuoteMeta = require("../model/QuoteMeta");
-const AuthorModel = require("../model/AuthorModel");
-const CategoryModel = require("../model/CategoryModel");
 const FileModel = require("../model/FileModel");
 const mongoose = require("mongoose");
 const ObjectId = mongoose.Types.ObjectId;
@@ -11,7 +9,7 @@ exports.createQuote = async (req, res) => {
         const reqBody = req.body;
         let quote = await QuoteModel.find({quote: reqBody.quote});
         if(quote.length >0){
-            res.json({status:"duplicate", message:"Quote already exists. Please, try with new qoute."});
+            res.json({status:"duplicate", message:"Quote already exists. Please, try with new quote."});
         }else {
             reqBody.userId = req.headers.userId;
             const data = await QuoteModel.create(reqBody);
@@ -58,6 +56,14 @@ exports.quoteList = async (req, res)=>{
             }};
         const unWindUser = {$unwind:"$user"};
 
+        const joinWithMeta = {$lookup:{
+                from: "quotemetas",
+                localField: "_id",
+                foreignField:"quoteId",
+                as: "meta"
+            }};
+        const unWindMeta = {$unwind:"$meta"};
+
         const projection = {$project:{
                 'quote':1,
                 'status':1,
@@ -67,6 +73,9 @@ exports.quoteList = async (req, res)=>{
                 'author.name':1,
                 'user.userName':1,
                 'updatedAt':1,
+                'meta.likes':1,
+                'meta.views':1,
+                'meta.sharedCount':1
             }}
 
         const data = await QuoteModel.aggregate([
@@ -76,6 +85,8 @@ exports.quoteList = async (req, res)=>{
             unWindAuthor,
             joinWithUser,
             unWindUser,
+            joinWithMeta,
+            unWindMeta,
             projection,
             {$sort:{ updatedAt : -1 }}
         ]);
@@ -116,6 +127,13 @@ exports.singleQuote = async (req, res)=>{
                 as: "user"
             }};
         const unWindUser = {$unwind:"$user"};
+        const joinWithMeta = {$lookup:{
+                from: "quotemetas",
+                localField: "_id",
+                foreignField:"quoteId",
+                as: "meta"
+            }};
+        const unWindMeta = {$unwind:"$meta"};
 
         const projection = {$project:{
                 'quote':1,
@@ -127,6 +145,9 @@ exports.singleQuote = async (req, res)=>{
                 'author.name':1,
                 'user.userName':1,
                 'updatedAt':1,
+                'meta.likes':1,
+                'meta.views':1,
+                'meta.sharedCount':1
             }}
 
         const data = await QuoteModel.aggregate([
@@ -137,6 +158,8 @@ exports.singleQuote = async (req, res)=>{
             unWindAuthor,
             joinWithUser,
             unWindUser,
+            joinWithMeta,
+            unWindMeta,
             projection
         ]);
 
@@ -149,13 +172,26 @@ exports.singleQuote = async (req, res)=>{
             { $project: { filePath: 1 } },
             { $sample: { size: 1 } }
         ]);
-        if(0 === img.length){
+        if(img.length === 0){
             img = await FileModel.aggregate([
                 { $project: { filePath: 1 } },
                 { $sample: { size: 1 } }
             ]);
         }
+
+        await QuoteMeta.updateOne({quoteId:id}, {$inc:{views:1}});
         res.json({status:"success", data:data, image:img});
+    }catch (e) {
+        res.json({status:"error", message:e.message});
+    }
+}
+
+exports.quoteMeta = async (req, res)=>{
+    try{
+        const id = new ObjectId(req.params.id);
+        const reqBody = req.body;
+        const data = await QuoteMeta.updateOne({quoteId:id}, {$inc:{sharedCount:reqBody.sharedCount, likes:reqBody.likes}});
+        res.json({status:"success", data:data});
     }catch (e) {
         res.json({status:"error", message:e.message});
     }
