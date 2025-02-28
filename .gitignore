@@ -2,7 +2,7 @@
 logs
 *.log
 
-uploads/
+#uploads/
 
 node_modules
 
