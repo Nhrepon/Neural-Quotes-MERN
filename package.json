@@ -1,7 +1,7 @@
 {
-  "name": "mern-pinterest-clone",
+  "name": "neural-quotes",
   "version": "1.0.0",
-  "description": "MERN-Pinterest-Clone",
+  "description": "Neural quotes MERN stack project.",
   "main": "index.js",
   "scripts": {
     "start": "nodemon index.js",

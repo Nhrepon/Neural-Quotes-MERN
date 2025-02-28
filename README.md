@@ -1,5 +1,5 @@
-# MERN-Pinterest-Clone
-Pinterest clone using Node js, Express js, React js and Mongodb.
+# Neural Quotes
+Neural quotes is a MERN stack project using Node js, Express js, React js and Mongodb.
 1. Image upload
 2. Show image in grid layout
 

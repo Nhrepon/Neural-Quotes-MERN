@@ -104,4 +104,9 @@ export function isLogin(){
 }
 
 
+export function isAdmin(){
+
+}
+
+
 

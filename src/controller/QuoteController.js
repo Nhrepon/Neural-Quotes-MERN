@@ -97,6 +97,78 @@ exports.quoteList = async (req, res)=>{
 }
 
 
+exports.quoteListPublic = async (req, res)=>{
+    try{
+        const matchStage = {$match: {status:"published"}};
+
+        const joinWithCategory = {$lookup:{
+                from: "categories",
+                localField: "categoryId",
+                foreignField:"_id",
+                as: "category"
+            }};
+        const unWindCategory = {$unwind:"$category"};
+
+        const joinWithAuthor = {$lookup:{
+                from: "authors",
+                localField: "authorId",
+                foreignField:"_id",
+                as: "author"
+            }};
+        const unWindAuthor = {$unwind:"$author"};
+
+        const joinWithUser = {$lookup:{
+                from: "profiles",
+                localField: "userId",
+                foreignField:"userId",
+                as: "user"
+            }};
+        const unWindUser = {$unwind:"$user"};
+
+        const joinWithMeta = {$lookup:{
+                from: "quotemetas",
+                localField: "_id",
+                foreignField:"quoteId",
+                as: "meta"
+            }};
+        const unWindMeta = {$unwind:"$meta"};
+
+        const projection = {$project:{
+                'quote':1,
+                'status':1,
+                'categoryId':1,
+                'authorId':1,
+                'category.categoryName':1,
+                'author.name':1,
+                'user.userName':1,
+                'updatedAt':1,
+                'meta.likes':1,
+                'meta.views':1,
+                'meta.sharedCount':1
+            }}
+
+        const data = await QuoteModel.aggregate([
+            matchStage,
+            joinWithCategory,
+            unWindCategory,
+            joinWithAuthor,
+            unWindAuthor,
+            joinWithUser,
+            unWindUser,
+            joinWithMeta,
+            unWindMeta,
+            projection,
+            {$sort:{ updatedAt : -1 }}
+        ]);
+        return res.json({status:"success", data:data});
+    }catch (e) {
+        res.json({status:"error", message:e.message});
+    }
+}
+
+
+
+
 
 exports.singleQuote = async (req, res)=>{
     try{

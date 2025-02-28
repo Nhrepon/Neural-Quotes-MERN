@@ -54,6 +54,9 @@ const UploadMediaComponent = () => {
     const uploadFile = async ()=>{
         let formData = new FormData();
         const categoryId = document.getElementById("categoryId").value;
+        if(categoryId === ""){
+            toast.error("Please, Select category name");
+        }
         if (file!=null && file.length > 0){
 
             //files.forEach((file) => formData.append('file', file));

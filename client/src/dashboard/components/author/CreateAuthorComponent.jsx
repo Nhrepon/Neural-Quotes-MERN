@@ -33,11 +33,11 @@ const CreateAuthorComponent = () => {
 
         <div className="new">
             <button title="Add new item" type="button" className="btn btn-success" data-bs-toggle="modal"
-                    data-bs-target="#create">
+                    data-bs-target="#createAuthor">
                 <i className="bi bi-plus"></i>
             </button>
 
-            <div className="modal fade" id="create" data-bs-backdrop="static" data-bs-keyboard="false"
+            <div className="modal fade" id="createAuthor" data-bs-backdrop="static" data-bs-keyboard="false"
                  tabIndex="-1"
                  aria-labelledby="exampleModalLabel" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered">

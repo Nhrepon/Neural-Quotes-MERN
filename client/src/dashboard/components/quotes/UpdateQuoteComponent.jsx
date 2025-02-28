@@ -103,6 +103,9 @@ const UpdateQuoteComponent = (props) => {
                                 }} className="form-select" aria-label="Default select">
                                     <option value="pending">Pending for review</option>
                                     <option value="draft">Draft</option>
+                                    {
+
+                                    }
                                 </select>
                             </div>
 
