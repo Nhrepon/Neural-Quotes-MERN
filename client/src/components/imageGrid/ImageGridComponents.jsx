@@ -2,6 +2,7 @@ import React, {useEffect, useState} from 'react';
 import './style.css';
 import axios from "axios";
 import {Link} from "react-router-dom";
+import {backendUrl} from "../../../config.js";
 
 const ImageGridComponents = () => {
 
@@ -91,7 +92,7 @@ const ImageGridComponents = () => {
 
                                     <div key={i} className="cards rounded-3 shadow-sm">
                                         <Link to={`/details/${item._id}`}>
-                                        <img className="w-100 rounded-top-2" src={`http://localhost:2000/${item.filePath}`} alt={"item.title"} crossOrigin={"anonymous"}/>
+                                        <img className="w-100 rounded-top-2" src={backendUrl+item.filePath} alt={"item.title"} crossOrigin={"anonymous"}/>
                                         <div className="d-flex justify-content-between px-2 mt-2">
                                             <p>title</p>
                                             <p><i className="bi bi-suit-heart"></i> {"item.love"}</p>

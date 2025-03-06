@@ -7,7 +7,7 @@ exports.createAuthor = async (req, res) => {
         const reqBody = req.body;
         let author = await AuthorModel.find({name: reqBody.name});
         if(author.length >0){
-            res.json({status:"duplicate", message:"Author name already exists. Please, try with new name."});
+            res.json({status:"duplicate", message:"Author name already exists. Please, try with new name.", data:author[0]});
         }else {
             if(isAdmin(req.headers.token || req.cookies.token)){
                 reqBody.createdBy = req.headers.userId;

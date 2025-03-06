@@ -244,7 +244,7 @@ exports.singleQuote = async (req, res)=>{
             { $project: { filePath: 1 } },
             { $sample: { size: 1 } }
         ]);
-        if(img.length === 0){
+        if(img.length === 0 || data[0].category.categoryName === "Uncategorized"){
             img = await FileModel.aggregate([
                 { $project: { filePath: 1 } },
                 { $sample: { size: 1 } }
