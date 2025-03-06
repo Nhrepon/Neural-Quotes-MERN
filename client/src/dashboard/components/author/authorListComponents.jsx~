@@ -2,7 +2,7 @@ import React, {useEffect} from 'react';
 import CreateAuthorComponent from "./CreateAuthorComponent.jsx";
 import AuthorStore from "../../store/AuthorStore.js";
 import UpdateAuthorComponent from "./UpdateAuthorComponent.jsx";
-import {DeleteAlert, truncateText} from "../../../utility/Utility.js";
+import {DeleteAlert} from "../../../utility/Utility.js";
 import toast from "react-hot-toast";
 import {backendUrl} from "../../../../config.js";
 
@@ -61,7 +61,7 @@ const AuthorListComponents = () => {
                                     <tr>
                                         <td>{i+1}</td>
                                         <td>{item.name}</td>
-                                        <td>{truncateText(item.bio, 50)}</td>
+                                        <td>{item.bio}</td>
                                         <td>{item.nationality}</td>
                                         <td>
                                             <img src={backendUrl+item.profilePicture} alt={item.name} width={120} height={90} crossOrigin={"anonymous"}/>

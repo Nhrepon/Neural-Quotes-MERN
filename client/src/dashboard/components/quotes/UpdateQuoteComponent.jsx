@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {modalHide} from "../../../utility/Utility.js";
+import {isAdmin, modalHide} from "../../../utility/Utility.js";
 import toast from "react-hot-toast";
 import QuoteStore from "../../store/QuoteStore.js";
 import CategoryStore from "../../store/CategoryStore.js";
@@ -104,7 +104,7 @@ const UpdateQuoteComponent = (props) => {
                                     <option value="pending">Pending for review</option>
                                     <option value="draft">Draft</option>
                                     {
-
+                                        isAdmin() && <option value="published">Published</option>
                                     }
                                 </select>
                             </div>

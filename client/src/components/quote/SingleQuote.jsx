@@ -72,10 +72,10 @@ const SingleQuote = () => {
     <div className="col-sm-3">
         {
             quote != null && (
-                <div className="card shadow position-relative" ref={cardRef}>
-                    <img className="card-img rounded" src={backendUrl+img.filePath} alt={quote.quote} crossOrigin={"anonymous"}/>
+                <div className="card shadow position-relative" ref={cardRef} style={{minHeight:"400px"}}>
+                    <img className="card-img rounded" src={backendUrl+img.filePath} alt={quote.quote} crossOrigin={"anonymous"} style={{minHeight:"400px"}}/>
                     <div className="card-body rounded d-flex align-items-center justify-content-center position-absolute text-center w-100 h-100"
-                        style={{backgroundColor: "rgba(0,0,0,0.7)"}}>
+                        style={{backgroundColor: "rgba(0,0,0,0.6)"}}>
                         <div>
                             <span className="d-flex">
                                 <svg fill="#fff" width="40px" height="40px" viewBox="0 0 32 32" version="1.1"

@@ -3,7 +3,7 @@ import CategoryStore from "../../store/CategoryStore.js";
 import AuthorStore from "../../store/AuthorStore.js";
 import QuoteStore from "../../store/QuoteStore.js";
 import toast from "react-hot-toast";
-import {DeleteAlert, modalHide} from "../../../utility/Utility.js";
+import {DeleteAlert, isAdmin, modalHide, truncateText} from "../../../utility/Utility.js";
 import UpdateQuoteComponent from "./UpdateQuoteComponent.jsx";
 import CreateAuthorComponent from "../author/CreateAuthorComponent.jsx";
 import CreateCategoryComponent from "../category/CreateCategoryComponent.jsx";
@@ -133,6 +133,9 @@ const QuoteListComponents = () => {
                             }} className="form-select" aria-label="Default select">
                                 <option value="pending">Pending for review</option>
                                 <option value="draft">Draft</option>
+                                {
+                                    isAdmin() && <option value="published">Published</option>
+                                }
                             </select>
                         </div>
                         <button onClick={onSubmit} className="btn btn-success">Add</button>
@@ -157,11 +160,11 @@ const QuoteListComponents = () => {
                                 return (
                                     <tr>
                                         <td>{i + 1}</td>
-                                        <td>{item.quote}</td>
+                                        <td>{truncateText(item.quote, 20)}</td>
                                         <td>{item.category["categoryName"]}</td>
-                                        <td>{item.author["name"]}</td>
+                                        <td>{truncateText(item.author["name"], 20)}</td>
                                         <td>{item.status}</td>
-                                        <td>{item.user["userName"]}</td>
+                                        <td>{truncateText(item.user["userName"], 10)}</td>
                                         <td>
                                             <div className={"d-flex text-center"}>
                                                 <UpdateQuoteComponent data={item}/>

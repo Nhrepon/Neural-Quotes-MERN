@@ -96,13 +96,6 @@ export async function modalHide(id){
 }
 
 
-export function truncateText (text, maxLength){
-    if (text.length <= maxLength) return text;
-    return text.substring(0, maxLength) + '...';
-}
-
-
-
 export function isLogin(){
     //console.log("this is cookie: "+ sessionStorage.getItem('email'));
     //return sessionStorage.getItem('email') != null && Cookies.get("token") != null;
