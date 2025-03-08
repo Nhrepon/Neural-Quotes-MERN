@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import CategoryStore from "../../store/CategoryStore.js";
 import AuthorStore from "../../store/AuthorStore.js";
 import QuoteStore from "../../store/QuoteStore.js";
@@ -7,12 +7,23 @@ import {DeleteAlert, isAdmin, modalHide, truncateText} from "../../../utility/Ut
 import UpdateQuoteComponent from "./UpdateQuoteComponent.jsx";
 import CreateAuthorComponent from "../author/CreateAuthorComponent.jsx";
 import CreateCategoryComponent from "../category/CreateCategoryComponent.jsx";
+import NotFoundComponent from "../../../components/notFound/NotFoundComponent.jsx";
 
 const QuoteListComponents = () => {
     const {getCategoryList, categoryList} = CategoryStore();
     const {getAuthorList, authorList} = AuthorStore();
     const {quoteFormOnChange, quoteForm, createQuote, quoteList, getQuoteList, deleteQuote, updateQuote} = QuoteStore();
 
+    const [pageNo, setPageNo] = useState(1);
+    const [perPage, setPerPage] = useState(10);
+    const [status, setStatus] = useState("published");
+
+    const statusData = [
+        {text:"Published", value:"published"},
+        {text:"Pending", value:"pending"},
+        {text:"Draft", value:"draft"},
+        {text:"Cancel", value:"cancel"},
+    ]
 
     useEffect(() => {
         (async () => {
@@ -22,7 +33,7 @@ const QuoteListComponents = () => {
             if (!authorList) {
                 await getAuthorList();
             }
-            await getQuoteList();
+            await getQuoteList(pageNo, perPage, status);
         })()
     }, []);
 
@@ -37,7 +48,7 @@ const QuoteListComponents = () => {
         } else {
             const res = await createQuote(quoteForm);
             if (res.status === "success") {
-                await getQuoteList();
+                await getQuoteList(pageNo, perPage, status);
                 toast.success("Quote created successfully.");
                 quoteForm.quote = "";
                 quoteForm.categoryId = "";
@@ -55,7 +66,7 @@ const QuoteListComponents = () => {
         if (await DeleteAlert()) {
             const res = await deleteQuote(id);
             if (res.status === "success") {
-                await getQuoteList();
+                await getQuoteList(pageNo, perPage, status);
                 toast.success("Quote deleted successfully!");
             } else {
                 toast.error(res.message);
@@ -82,9 +93,9 @@ const QuoteListComponents = () => {
                         </div>
                         <div className="form-group">
                             <label htmlFor="quote">Quote</label>
-                            <input value={quoteForm.quote} onChange={(e) => {
+                            <textarea value={quoteForm.quote} onChange={(e) => {
                                 quoteFormOnChange("quote", e.target.value)
-                            }} type="text" name="quote" id="quote" className="form-control"/>
+                            }} name="quote" id="quote" className="form-control" rows="3"></textarea>
                         </div>
                         <div className="form-group">
                             <label htmlFor="category">Category</label>
@@ -142,50 +153,66 @@ const QuoteListComponents = () => {
                     </div>
                 </div>
                 <div className="col-sm-8">
-                    <table className={"table table-striped"}>
-                        <thead>
-                        <tr>
-                            <th>Sl</th>
-                            <th>Quote</th>
-                            <th>Category</th>
-                            <th>Author</th>
-                            <th>Status</th>
-                            <th>User</th>
-                            <th>Action</th>
-                        </tr>
-                        </thead>
-                        <tbody>
+                    <div className="shadow">
                         {
-                            quoteList && quoteList.map((item, i) => {
+                            statusData && statusData.map((item, i) => {
                                 return (
-                                    <tr>
-                                        <td>{i + 1}</td>
-                                        <td>{truncateText(item.quote, 20)}</td>
-                                        <td>{item.category["categoryName"]}</td>
-                                        <td>{truncateText(item.author["name"], 20)}</td>
-                                        <td>{item.status}</td>
-                                        <td>{truncateText(item.user["userName"], 10)}</td>
-                                        <td>
-                                            <div className={"d-flex text-center"}>
-                                                <UpdateQuoteComponent data={item}/>
-                                                {/*<button className="btn text-success border-0">*/}
-                                                {/*    <i className="bi bi-pencil-fill"></i>*/}
-                                                {/*</button>*/}
-
-                                                <button onClick={async () => {
-                                                    await deleteItem(item["_id"])
-                                                }} className="btn text-danger border-0">
-                                                    <i className="bi bi-trash"></i>
-                                                </button>
-                                            </div>
-                                        </td>
-                                    </tr>
+                                    <button value={item.value} onClick={async () => {
+                                        await getQuoteList(pageNo, perPage, item.value);
+                                    }}
+                                            className={item.value === "cancel" ? "btn btn-danger rounded-0" : "btn btn-success rounded-0"}>{item.text}</button>
                                 )
                             })
                         }
+                    </div>
+                    {
+                        quoteList == null ? <NotFoundComponent/> :
+                            <table className={"table table-striped"}>
+                                <thead>
+                                <tr>
+                                    <th>Sl</th>
+                                    <th>Quote</th>
+                                    <th>Category</th>
+                                    <th>Author</th>
+                                    <th>Status</th>
+                                    <th>User</th>
+                                    <th>Action</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {
 
-                        </tbody>
-                    </table>
+                                    quoteList && quoteList.map((item, i) => {
+                                        return (
+                                            <tr>
+                                                <td>{i + 1}</td>
+                                                <td>{truncateText(item.quote, 20)}</td>
+                                                <td>{item.category["categoryName"]}</td>
+                                                <td>{truncateText(item.author["name"], 20)}</td>
+                                                <td>{item.status}</td>
+                                                <td>{truncateText(item.user["userName"], 10)}</td>
+                                                <td>
+                                                    <div className={"d-flex text-center"}>
+                                                        <UpdateQuoteComponent data={item}/>
+                                                        {/*<button className="btn text-success border-0">*/}
+                                                        {/*    <i className="bi bi-pencil-fill"></i>*/}
+                                                        {/*</button>*/}
+
+                                                        <button onClick={async () => {
+                                                            await deleteItem(item["_id"])
+                                                        }} className="btn text-danger border-0">
+                                                            <i className="bi bi-trash"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        )
+                                    })
+                                }
+
+                                </tbody>
+                            </table>
+                    }
                 </div>
             </div>
         </div>

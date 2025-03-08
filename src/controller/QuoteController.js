@@ -32,6 +32,13 @@ exports.createQuote = async (req, res) => {
 exports.quoteList = async (req, res)=>{
     try{
 
+        let pageNo = Number(req.query.pageNo) || 1;
+        let perPage = Number(req.query.perPage) || 10;
+        let skip = (pageNo-1)*perPage;
+        let status = req.query.status || "published";
+
+        const matchStage = {$match: {status:status}};
+
         const joinWithCategory = {$lookup:{
                 from: "categories",
                 localField: "categoryId",
@@ -72,6 +79,7 @@ exports.quoteList = async (req, res)=>{
                 'category.categoryName':1,
                 'author.name':1,
                 'user.userName':1,
+                'createdAt':1,
                 'updatedAt':1,
                 'meta.likes':1,
                 'meta.views':1,
@@ -79,18 +87,29 @@ exports.quoteList = async (req, res)=>{
             }}
 
         const data = await QuoteModel.aggregate([
-            joinWithCategory,
-            unWindCategory,
-            joinWithAuthor,
-            unWindAuthor,
-            joinWithUser,
-            unWindUser,
-            joinWithMeta,
-            unWindMeta,
-            projection,
-            {$sort:{ updatedAt : -1 }}
+            {
+                $facet:{
+                    total:[matchStage,{$count:"total"}],
+                    data:[
+                        matchStage,
+                        joinWithCategory,
+                        unWindCategory,
+                        joinWithAuthor,
+                        unWindAuthor,
+                        joinWithUser,
+                        unWindUser,
+                        joinWithMeta,
+                        unWindMeta,
+                        projection,
+                        {$sort:{ updatedAt : -1 }},
+                        {$skip:skip},
+                        {$limit:perPage},
+                    ]
+                }
+            }
         ]);
-        return res.json({status:"success", data:data});
+        //return res.json({status:"success", data:data});
+        return res.json({status:"success", total:data[0].total[0].total, load:data[0].data.length, data:data[0].data});
     }catch (e) {
         res.json({status:"error", message:e.message});
     }
@@ -141,6 +160,7 @@ exports.quoteListPublic = async (req, res)=>{
                 'category.categoryName':1,
                 'author.name':1,
                 'user.userName':1,
+                'createdAt':1,
                 'updatedAt':1,
                 'meta.likes':1,
                 'meta.views':1,

@@ -22,9 +22,9 @@ const QuoteStore = create((set)=>({
         }
     },
     quoteList:null,
-    getQuoteList:async ()=>{
+    getQuoteList:async (pageNo, perPage, status)=>{
         try{
-            const res =await axios.get("/api/quoteList");
+            const res =await axios.get(`/api/quoteList?pageNo=${pageNo}&perPage=${perPage}&status=${status}`);
             set({quoteList: res.data['data']});
             return res.data["status"] === "success";
         }catch (e) {
