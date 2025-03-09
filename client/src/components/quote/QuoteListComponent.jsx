@@ -1,14 +1,18 @@
-import {useEffect} from 'react';
+import {useEffect, useState} from 'react';
 
 import QuoteStore from "../../dashboard/store/QuoteStore.js";
 import {Link} from "react-router-dom";
 
 const QuoteListComponent = ({data}) => {
 
+    const [pageNo, setPageNo] = useState(1);
+    const [perPage, setPerPage] = useState(10);
+    const [status, setStatus] = useState("published");
+
     const {quoteList, getQuoteList}=QuoteStore();
     useEffect(()=>{
         (async ()=>{
-            await getQuoteList();
+            await getQuoteList(pageNo, perPage, status);
         })()
     },[])
 
