@@ -108,8 +108,15 @@ exports.fileUpload = async (req, res) => {
 
         try {
             let {categoryId} = req.body;
+            let categoryName = "NHRepon";
+
             if(Array.isArray(categoryId)){
                 categoryId = categoryId[0];
+                let categoryData = await CategoryModel.findOne({ _id: categoryId });
+                categoryName = categoryData.categoryName;
+            }else{
+                let categoryData = await CategoryModel.findOne({ _id: categoryId });
+                categoryName = categoryData.categoryName;
             }
             // Ensure upload directory exists
             const uploadDir = './uploads';
@@ -125,7 +132,7 @@ exports.fileUpload = async (req, res) => {
                         .toBuffer();
 
                     // Define file name and path
-                    const outputFileName = `${file.fieldname}-${Date.now()}-${Math.round(Math.random() * 10000)}.webp`;
+                    const outputFileName = `${categoryName}-${Date.now()}-${Math.round(Math.random() * 10000)}-neural-quotes-by-NHRepon.webp`;
                     const outputFilePath = path.join(uploadDir, outputFileName);
 
                     // Write WebP file to disk
