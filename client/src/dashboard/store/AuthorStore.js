@@ -22,9 +22,9 @@ const AuthorStore = create((set)=>({
         }
     },
     authorList:null,
-    getAuthorList:async ()=>{
+    getAuthorList:async (pageNo, perPage)=>{
         try{
-            const res =await axios.get("/api/authorList");
+            const res =await axios.get(`/api/authorList?pageNo=${pageNo}&perPage=${perPage}`);
             set({authorList: res.data['data']});
             return res.data["status"] === "success";
         }catch (e) {

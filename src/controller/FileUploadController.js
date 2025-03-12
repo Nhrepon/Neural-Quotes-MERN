@@ -182,6 +182,10 @@ exports.fileUpload = async (req, res) => {
 
 exports.fileLoad = async (req, res)=>{
     try {
+        let pageNo = Number(req.query.pageNo) || 1;
+        let perPage = Number(req.query.perPage) || 10;
+        let skip = (pageNo-1)*perPage;
+
         const joinWithCategory = {$lookup:{
                 from: "categories",
                 localField: "categoryId",
@@ -207,15 +211,27 @@ exports.fileLoad = async (req, res)=>{
             }}
 
         const data = await FileModel.aggregate([
-            joinWithCategory,
-            unWindCategory,
-            joinWithUser,
-            unWindUser,
-            projection,
-            {$sort:{ updatedAt : -1 }}
+            {
+                $facet:{
+                    total:[{$count:"total"}],
+                    data:[
+                        {$match:{categoryId:{$ne:new mongoose.Types.ObjectId("67c93e7bff401abf3898c328")}}},
+                        joinWithCategory,
+                        unWindCategory,
+                        joinWithUser,
+                        unWindUser,
+                        projection,
+                        {$sort:{ updatedAt : -1 }},
+                        {$skip:skip},
+                        {$limit:perPage},
+                    ]
+                }
+            }
+
         ]);
 
-        res.json({status:"success", file:data});
+        //res.json({status:"success", file:data});
+        res.json({status:"success", total:data[0].total[0].total, load:data[0].data.length, file:data[0].data});
     }catch (e) {
         res.json({status:"failed", message:e});
     }

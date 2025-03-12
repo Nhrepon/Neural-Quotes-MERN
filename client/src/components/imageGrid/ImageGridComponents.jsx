@@ -69,9 +69,11 @@ const ImageGridComponents = () => {
 
 
     const [imgFile, setImgFile] = useState(null);
+    const [pageNo, setPageNo] = useState(1);
+    const [perPage, setPerPage] = useState(20);
 
     const loadFile = async ()=>{
-        const res = await axios.get("api/fileLoad");
+        const res = await axios.get(`api/fileLoad?pageNo=${pageNo}&perPage=${perPage}`);
         setImgFile(res.data.file);
     }
 
@@ -93,10 +95,10 @@ const ImageGridComponents = () => {
                                     <div key={i} className="cards rounded-3 shadow-sm">
                                         <Link to={`/details/${item._id}`}>
                                         <img className="w-100 rounded-top-2" src={backendUrl+item.filePath} alt={"item.title"} crossOrigin={"anonymous"}/>
-                                        <div className="d-flex justify-content-between px-2 mt-2">
-                                            <p>title</p>
-                                            <p><i className="bi bi-suit-heart"></i> {"item.love"}</p>
-                                        </div>
+                                        {/*<div className="d-flex justify-content-between px-2 mt-2">*/}
+                                        {/*    <p>title</p>*/}
+                                        {/*    <p><i className="bi bi-suit-heart"></i> {item.category["categoryName"]}</p>*/}
+                                        {/*</div>*/}
                                         </Link>
                                     </div>
 

@@ -26,8 +26,35 @@ exports.createAuthor = async (req, res) => {
 
 exports.authorList = async (req, res) => {
     try{
-        const data = await AuthorModel.find().sort({updatedAt: -1});
-        res.json({status:"success", data: data});
+        let pageNo = Number(req.query.pageNo) || 1;
+        let perPage = Number(req.query.perPage) || 10;
+        let skip = (pageNo-1)*perPage;
+        const projection = {$project:{
+                'name':1,
+                'bio':1,
+                'profilePicture':1,
+                'authorId':1,
+                'nationality':1,
+                'createdAt':1,
+                'updatedAt':1,
+            }}
+        //const data = await AuthorModel.find().sort({updatedAt: -1});
+        const data = await AuthorModel.aggregate([
+            {
+                $facet:{
+                    total:[{$count:"total"}],
+                    data:[
+                        projection,
+                        {$sort:{ updatedAt : -1 }},
+                        {$skip:skip},
+                        {$limit:perPage},
+                    ]
+                }
+            }
+        ]);
+
+        //res.json({status:"success", data: data});
+        res.json({status:"success", total:data[0].total[0].total, load:data[0].data.length, data:data[0].data});
     }catch (e) {
         res.json({status:"error", message:e.message});
     }

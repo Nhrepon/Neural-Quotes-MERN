@@ -27,7 +27,7 @@ const UploadMediaComponent = () => {
 
     useEffect(() => {
         (async ()=>{
-            await getFileList();
+            await getFileList(1,20);
             await getCategoryList(1, 1000, 0);
         })()
     }, []);
@@ -41,7 +41,7 @@ const UploadMediaComponent = () => {
         if(await DeleteAlert()){
             const res = await axios.delete(`api/fileDelete/${id}`);
             if (res.data.status === "success") {
-                await getFileList();
+                await getFileList(1,20);
                 toast.success(`${id} deleted successfully!`);
             }else {
                 toast.error(res.data.message);
@@ -105,7 +105,7 @@ const UploadMediaComponent = () => {
                 if(res['data'].status === "success"){
                     //setImgFile(res.data.path);
                     setFile(null);
-                    await getFileList();
+                    await getFileList(1,20);
                     document.getElementById("file").value = "";
                     toast.success(`File upload success!`);
                 }else {

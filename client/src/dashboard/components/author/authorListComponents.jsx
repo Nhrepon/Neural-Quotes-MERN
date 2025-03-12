@@ -1,4 +1,4 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import CreateAuthorComponent from "./CreateAuthorComponent.jsx";
 import AuthorStore from "../../store/AuthorStore.js";
 import UpdateAuthorComponent from "./UpdateAuthorComponent.jsx";
@@ -9,9 +9,12 @@ import {backendUrl} from "../../../../config.js";
 const AuthorListComponents = () => {
 
     const {authorList, getAuthorList, deleteAuthor}=AuthorStore();
+    const [pageNo, setPageNo] = useState(1);
+    const [perPage, setPerPage] = useState(10);
+
     useEffect(()=>{
         (async ()=>{
-            await getAuthorList();
+            await getAuthorList(pageNo, perPage);
         })()
     }, []);
 
@@ -29,6 +32,22 @@ const AuthorListComponents = () => {
 
     }
 
+    const handleOnChange = async (event) => {
+        const selectedPerPage = parseInt(event.target.value);
+        setPerPage(selectedPerPage);
+        await getAuthorList(1, selectedPerPage);
+        setPageNo(1);
+    };
+
+    const nextPage = async ()=>{
+        setPageNo(pageNo+1);
+        await getAuthorList(pageNo, perPage);
+    }
+    const previousPage = async ()=>{
+        setPageNo(pageNo-1);
+        await getAuthorList(pageNo, perPage);
+    }
+
     return (
         <div className="container">
             <div className="row">
@@ -36,6 +55,21 @@ const AuthorListComponents = () => {
                     <h2>Author</h2>
                     <div className="position-absolute start-0 ms-2 mt-2">
                         <CreateAuthorComponent/>
+                    </div>
+                    <div className="position-absolute end-0 d-flex flex-row align-items-center">
+                        <div>
+                            <i onClick={previousPage} className="bi bi-chevron-left fw-bold"></i>
+                            <i onClick={nextPage} className="bi bi-chevron-right fw-bold"></i>
+                        </div>
+                        <div className="form-group">
+                            <select onChange={(e) => handleOnChange(e)} value={perPage.toString()}
+                                    className="form-select form-control">
+                                <option value="10">10 per page</option>
+                                <option value="25">25 per page</option>
+                                <option value="50">50 per page</option>
+                                <option value="100">100 per page</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
 

@@ -104,7 +104,11 @@ const UpdateQuoteComponent = (props) => {
                                     <option value="pending">Pending for review</option>
                                     <option value="draft">Draft</option>
                                     {
-                                        isAdmin() && <option value="published">Published</option>
+                                        isAdmin() &&
+                                        <>
+                                            <option value="cancel">Cancel</option>
+                                            <option value="published">Published</option>
+                                        </>
                                     }
                                 </select>
                             </div>

@@ -53,6 +53,11 @@ const QuoteListComponents = () => {
                 quoteForm.quote = "";
                 quoteForm.categoryId = "";
                 quoteForm.authorId = "";
+                document.getElementById("quote").value = "";
+                document.getElementById("category").value = "";
+                document.getElementById("author").value = "";
+                document.getElementById("status").value = "";
+
             } else if (res.status === "duplicate") {
                 toast.error(res.message);
             } else {
@@ -76,6 +81,11 @@ const QuoteListComponents = () => {
 
     }
 
+    const handleOnChange = async (event) => {
+        const selectedPerPage = parseInt(event.target.value);
+        setPerPage(selectedPerPage);
+        await getQuoteList(1, selectedPerPage, status);
+    };
 
     return (
         <div className={"container"}>
@@ -100,7 +110,7 @@ const QuoteListComponents = () => {
                         <div className="form-group">
                             <label htmlFor="category">Category</label>
                             <div className="d-flex">
-                                <select value={quoteForm.categoryId} onChange={(e) => {
+                                <select id="category" value={quoteForm.categoryId} onChange={(e) => {
                                     quoteFormOnChange("categoryId", e.target.value)
                                 }} className="form-select" aria-label="Default select">
                                     <option selected>Select category</option>
@@ -120,7 +130,7 @@ const QuoteListComponents = () => {
                         <div className="form-group">
                         <label htmlFor="author">Author</label>
                         <div className="d-flex">
-                                <select value={quoteForm.authorId} onChange={(e) => {
+                                <select id="author" value={quoteForm.authorId} onChange={(e) => {
                                     quoteFormOnChange("authorId", e.target.value)
                                 }} className="form-select" aria-label="Default select">
                                     <option selected>Select author</option>
@@ -139,13 +149,17 @@ const QuoteListComponents = () => {
                         </div>
                         <div className="form-group">
                             <label htmlFor="status">Status</label>
-                            <select value={quoteForm.status} onChange={(e) => {
+                            <select id="status" value={quoteForm.status} onChange={(e) => {
                                 quoteFormOnChange("status", e.target.value)
                             }} className="form-select" aria-label="Default select">
                                 <option value="pending">Pending for review</option>
                                 <option value="draft">Draft</option>
                                 {
-                                    isAdmin() && <option value="published">Published</option>
+                                    isAdmin() &&
+                                    <>
+                                        <option value="cancel">Cancel</option>
+                                        <option value="published">Published</option>
+                                    </>
                                 }
                             </select>
                         </div>
@@ -153,17 +167,31 @@ const QuoteListComponents = () => {
                     </div>
                 </div>
                 <div className="col-sm-8">
-                    <div className="shadow">
-                        {
-                            statusData && statusData.map((item, i) => {
-                                return (
-                                    <button value={item.value} onClick={async () => {
-                                        await getQuoteList(pageNo, perPage, item.value);
-                                    }}
-                                            className={item.value === "cancel" ? "btn btn-danger rounded-0" : "btn btn-success rounded-0"}>{item.text}</button>
-                                )
-                            })
-                        }
+                    <div className="shadow d-flex flex-row justify-content-between">
+                        <div className="">
+                            {
+                                statusData && statusData.map((item, i) => {
+                                    return (
+                                        <button value={item.value} onClick={async () => {
+                                            await getQuoteList(pageNo, perPage, item.value);
+                                            setStatus(item.value);
+                                        }}
+                                                className={item.value === "cancel" ? "btn btn-danger rounded-0" : "btn btn-success rounded-0"}>{item.text}</button>
+                                    )
+                                })
+                            }
+                        </div>
+                        <div>
+                            <div className="form-group">
+                                <select onChange={(e) => handleOnChange(e)} value={perPage.toString()}
+                                        className="form-select form-control">
+                                    <option value="10">10 per page</option>
+                                    <option value="25">25 per page</option>
+                                    <option value="50">50 per page</option>
+                                    <option value="100">100 per page</option>
+                                </select>
+                            </div>
+                        </div>
                     </div>
                     {
                         quoteList == null ? <NotFoundComponent/> :

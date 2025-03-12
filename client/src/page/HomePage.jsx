@@ -8,12 +8,10 @@ const HomePage = () => {
         <MasterLayout>
             <div className="container">
                 <div className="row">
-                    <div className="col-sm-6">
+
                         <QuoteListComponent/>
-                    </div>
-                    <div className="col-sm-6">
                         <ImageGridComponents/>
-                    </div>
+
                 </div>
             </div>
 

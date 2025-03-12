@@ -5,16 +5,16 @@ import toast from "react-hot-toast";
 import './mediaPicker.css';
 
 const MediaPicker = ({onInputChange}) => {
-    const {fileList, getFileList}=MediaStore();
+    const {fileList, getFileList} = MediaStore();
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     useEffect(() => {
         (async ()=>{
-            if (!fileList){
-                await getFileList();
+            if (fileList == null || fileList.length === 0 || fileList.length < 0){
+                await getFileList(1,1000);
             }
         })()
-    }, [fileList]);
+    }, []);
 
     // const onSubmit=async (filePath)=>{
     //     await onInputChange(filePath);
