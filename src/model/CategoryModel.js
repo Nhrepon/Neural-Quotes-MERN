@@ -5,5 +5,6 @@ const databaseSchema = mongoose.Schema({
     categoryImg:{type:String},
     createdBy:{type:mongoose.Schema.Types.ObjectId, ref:'UserModel'},
 }, { timestamps: true , versionKey: false });
+databaseSchema.index({updatedAt:1});
 const CategoryModel = mongoose.model("categories", databaseSchema);
 module.exports = CategoryModel;

@@ -1,6 +1,6 @@
 const mongoose = require('mongoose');
 const databaseSchema = mongoose.Schema({
-    quoteId:{type: mongoose.Schema.Types.ObjectId, ref: 'QuoteModel'},
+    quoteId:{type: mongoose.Schema.Types.ObjectId, ref: 'QuoteModel', index: true, required: true},
     likes: {type: Number, default: 0},
     views: {type: Number, default: 0},
     sharedCount: {type: Number, default: 0},

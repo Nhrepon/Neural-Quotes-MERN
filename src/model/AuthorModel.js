@@ -8,7 +8,7 @@ const databaseSchema = mongoose.Schema({
 
 }, {timestamps: true, versionKey: false});
 
-databaseSchema.index({name:1});
+databaseSchema.index({updatedAt:1});
 
 const AuthorModel = mongoose.model('authors',databaseSchema);
 module.exports = AuthorModel;

@@ -72,8 +72,8 @@ const SingleQuote = () => {
     <div className="col-sm-3">
         {
             quote != null && (
-                <div className="card shadow position-relative" ref={cardRef} style={{minHeight:"400px"}}>
-                    <img className="card-img rounded" src={backendUrl+img.filePath} alt={quote.quote} crossOrigin={"anonymous"} style={{minHeight:"400px"}}/>
+                <div className="card shadow position-relative" ref={cardRef} style={{minHeight:"450px"}}>
+                    <img className="card-img rounded" src={backendUrl+img.filePath} alt={quote.quote} crossOrigin={"anonymous"} style={{minHeight:"450px"}}/>
                     <div className="card-body rounded d-flex align-items-center justify-content-center position-absolute text-center w-100 h-100"
                         style={{backgroundColor: "rgba(0,0,0,0.6)"}}>
                         <div>
@@ -84,7 +84,8 @@ const SingleQuote = () => {
                                     d="M9.563 8.469l-0.813-1.25c-5.625 3.781-8.75 8.375-8.75 12.156 0 3.656 2.688 5.375 4.969 5.375 2.875 0 4.906-2.438 4.906-5 0-2.156-1.375-4-3.219-4.688-0.531-0.188-1.031-0.344-1.031-1.25 0-1.156 0.844-2.875 3.938-5.344zM21.969 8.469l-0.813-1.25c-5.563 3.781-8.75 8.375-8.75 12.156 0 3.656 2.75 5.375 5.031 5.375 2.906 0 4.969-2.438 4.969-5 0-2.156-1.406-4-3.313-4.688-0.531-0.188-1-0.344-1-1.25 0-1.156 0.875-2.875 3.875-5.344z"></path>
                             </svg>
                             </span>
-                            <p className="card-text text-light text-center mx-2 text-wrap" >{quote.quote}</p>
+                            <p className="card-text fs-5 text-light text-center mx-2 text-wrap"
+                               style={{overflow: "hidden", display: "-webkit-box", WebkitLineClamp: "10", WebkitBoxOrient: "vertical"}}>{quote.quote}</p>
                             <span className="d-flex justify-content-end">
                                 <svg style={{transform: "rotate(180deg)"}} fill="#fff" width="40px" height="40px" viewBox="0 0 32 32" version="1.1"
                                      xmlns="http://www.w3.org/2000/svg">

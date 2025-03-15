@@ -1,7 +1,7 @@
 const mongoose=require('mongoose');
 
 const databaseSchema=mongoose.Schema({
-    userId:{type:mongoose.Schema.Types.ObjectId, require:true},
+    userId:{type:mongoose.Schema.Types.ObjectId, require:true, index: true, ref:"UserModel"},
     userName:{type:String, require:true, unique:true},
     firstName:{type:String, default: '' },
     lastName:{type:String, default: '' },

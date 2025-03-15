@@ -15,6 +15,10 @@ body {
 
 }
 
+.gradientbg{
+  background: rgb(34,53,195);
+  background: linear-gradient(0deg, rgba(34,53,195,0.8883928571428571) 0%, rgba(1,138,1,0.9136029411764706) 100%);
+}
 
 
 

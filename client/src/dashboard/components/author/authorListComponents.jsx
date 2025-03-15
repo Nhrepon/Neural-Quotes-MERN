@@ -8,9 +8,10 @@ import {backendUrl} from "../../../../config.js";
 
 const AuthorListComponents = () => {
 
-    const {authorList, getAuthorList, deleteAuthor}=AuthorStore();
+    const {authorList, getAuthorList, totalAuthor,deleteAuthor}=AuthorStore();
     const [pageNo, setPageNo] = useState(1);
     const [perPage, setPerPage] = useState(10);
+    const totalPage = Math.ceil(totalAuthor/perPage);
 
     useEffect(()=>{
         (async ()=>{
@@ -56,10 +57,11 @@ const AuthorListComponents = () => {
                     <div className="position-absolute start-0 ms-2 mt-2">
                         <CreateAuthorComponent/>
                     </div>
-                    <div className="position-absolute end-0 d-flex flex-row align-items-center">
-                        <div>
-                            <i onClick={previousPage} className="bi bi-chevron-left fw-bold"></i>
-                            <i onClick={nextPage} className="bi bi-chevron-right fw-bold"></i>
+                    <div className="position-absolute end-0 me-3 d-flex flex-row align-items-center gap-3">
+                        <div className="d-flex flex-row gap-3">
+                            <i onClick={previousPage} className={pageNo === 1?"d-none":"bi bi-chevron-double-left fw-bold"}></i>
+                            <span>{pageNo}</span>
+                            <i onClick={nextPage} className={pageNo === totalPage-1?"d-none":"bi bi-chevron-double-right fw-bold"}></i>
                         </div>
                         <div className="form-group">
                             <select onChange={(e) => handleOnChange(e)} value={perPage.toString()}
@@ -93,7 +95,7 @@ const AuthorListComponents = () => {
                             authorList && authorList.map((item, i)=>{
                                 return (
                                     <tr>
-                                        <td>{i+1}</td>
+                                        <td>{i+1+(pageNo*perPage)-perPage}</td>
                                         <td>{item.name}</td>
                                         <td>{truncateText(item.bio, 50)}</td>
                                         <td>{item.nationality}</td>
