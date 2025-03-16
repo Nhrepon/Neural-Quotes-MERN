@@ -152,3 +152,67 @@ exports.deleteCategory = async (req, res)=>{
         res.json({status:"error", message:e.message});
     }
 }
+
+
+
+exports.categoryWithQuotes = async (req, res)=>{
+    try{
+        const categoriesWithQuotes = await CategoryModel.aggregate([
+            {
+                $match: {
+                    categoryName: { $ne: "Uncategorized" }, // Filter out "Uncategorized"
+                },
+            },
+            {
+                // $lookup: {
+                //     from: "quotes",
+                //     localField: "_id",
+                //     foreignField: "categoryId",
+                //     as: "quotes",
+                // },
+                $lookup: {
+                    from: "quotes",
+                    let: { categoryId: "$_id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { $eq: ["$categoryId", "$$categoryId"] },
+                                status: "published", // Filter quotes by status
+                            },
+                        },
+                        {
+                            $project: {
+                                _id: 1,
+                                quote: 1,
+                                // Add other quote fields you want to include
+                            },
+                        },
+                    ],
+                    as: "quotes",
+                },
+
+
+            },
+            {
+                $match: {
+                    "quotes.0": { $exists: true }, // Filter categories with at least one quote
+                },
+            },
+            {
+                $project: {
+                    _id: 1,
+                    categoryName: 1,
+                    categoryDesc: 1,
+                    categoryImg: 1,
+                    //createdBy: 1,
+                    //createdAt: 1,
+                    updatedAt: 1,
+                    quoteCount: {$size: "$quotes"} //add a quote count property
+                },
+            },
+        ]);
+        return res.json({status:"success", data:categoriesWithQuotes});
+    }catch (e) {
+        res.json({status:"error", message:e.message});
+    }
+}

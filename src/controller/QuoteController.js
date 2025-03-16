@@ -306,9 +306,9 @@ exports.quoteListForBanner = async (req, res)=>{
             joinWithAuthor,
             unWindAuthor,
             projection,
-            {$sample:{size:5}},
-            {$sort:{updatedAt:-1}},
-            {$limit: 5},
+            {$sample:{size:10}},
+            //{$sort:{updatedAt:-1}},
+            {$limit: 10},
         ]);
 
         const quotesWithImages = await Promise.all(data.map(async (quote) => {
@@ -338,3 +338,79 @@ exports.quoteListForBanner = async (req, res)=>{
     }
 }
 
+
+exports.popularQuotes = async (req, res)=>{
+    try{
+        const matchStage = {$match: {status:"published"}};
+        const joinWithMeta = {$lookup:{
+                from: "quotemetas",
+                localField: "_id",
+                foreignField:"quoteId",
+                as: "meta",
+                pipeline: [{$project:{likes:1, views:1, sharedCount:1}}]
+            }};
+        const unWindMeta = {$unwind:"$meta"};
+        const data = await QuoteModel.aggregate([
+            matchStage,
+            joinWithMeta,
+            unWindMeta,
+            {$sort:{"meta.views":-1}},
+            {$limit: 5},
+        ]);
+        res.json({status:"success", data:data});
+    }catch (e) {
+        res.json({status:"error", message:e.message});
+    }
+}
+
+
+exports.quoteByCategory = async (req, res)=>{
+    try{
+        const id = new ObjectId(req.params.id);
+        const perPage = Number(req.query.perPage) || 10;
+        const pageNo = Number(req.query.pageNo) || 1;
+        const skip = (Number(req.query.pageNo)-1)*perPage || 0;
+
+        const matchStage = {$match: {status:"published", categoryId:id}};
+        const data = await QuoteModel.aggregate([
+            {
+                $facet: {
+                    total: [matchStage,{$count: "total"}],
+                    data: [
+                        matchStage,
+                        {$sort:{updatedAt:-1}},
+                        {$skip:skip},
+                        {$limit: perPage},
+                    ]
+                }
+            }
+        ]);
+
+        const quotesWithImages = await Promise.all(data[0].data.map(async (quote) => {
+            let image;
+            try {
+                image = await FileModel.aggregate([
+                    { $match: { categoryId: quote.categoryId } },
+                    { $project: { filePath: 1 } },
+                    { $sample: { size: 1 } }
+                ]);
+                if (image.length === 0 || quote.categoryId === "67c93e7bff401abf3898c328") {
+                    image = await FileModel.aggregate([
+                        { $project: { filePath: 1 } },
+                        { $sample: { size: 1 } }
+                    ]);
+                }
+                return { ...quote, image: image[0]?.filePath || null };
+            } catch (imageError) {
+                console.error("Error fetching image:", imageError);
+                return { ...quote, image: null };
+            }
+        }));
+
+
+
+        res.json({status:"success", message:"Quote by category list fetch successfully", total:data[0].total[0].total, load:data[0].data.length, data:quotesWithImages});
+    }catch (e) {
+        res.json({status:"error", message:e.message});
+    }
+}

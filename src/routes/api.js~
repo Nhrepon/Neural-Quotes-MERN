@@ -53,6 +53,6 @@ router.put('/updateQuote/:id',AuthMiddleware, QuoteController.updateQuote);
 router.delete('/deleteQuote/:id',AuthMiddleware, QuoteController.deleteQuote);
 router.get('/banner-quote', QuoteController.quoteListForBanner);
 router.get('/popular-quote', QuoteController.popularQuotes);
-router.get('/quoteByCategory/:id', QuoteController.quoteByCategory);
+router.get('/quoteByCategory', QuoteController.quoteByCategory);
 
 module.exports = router;

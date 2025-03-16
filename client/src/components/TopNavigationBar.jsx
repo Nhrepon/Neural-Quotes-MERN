@@ -20,10 +20,10 @@ const TopNavigationBar = () => {
 
     // Change navigation bg on scroll ---------------------------------------------
     $(function () {
-        var topNavBg = $(".top-nav");
-        var gotoTop = $(".goto-top");
+        let topNavBg = $(".top-nav");
+        let gotoTop = $(".goto-top");
         $(window).scroll(function () {
-            var scroll = $(window).scrollTop();
+            let scroll = $(window).scrollTop();
 
             if (scroll > 10) {
                 topNavBg.removeClass('bg-transparent').addClass("bg-light");
@@ -56,7 +56,7 @@ const TopNavigationBar = () => {
 
 
     return (
-        <div className="container-fluid sticky-md-top bg-transparent z-3 shadow-sm top-nav">
+        <div className="container-fluid sticky-md-top bg-light z-3 shadow-sm top-nav">
             <div className="container">
                 <div className="row">
                     <nav className="navbar navbar-expand-md">
