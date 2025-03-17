@@ -6,6 +6,7 @@ const CategoryController = require("../controller/CategoryController");
 const QuoteController = require("../controller/QuoteController");
 const AuthorController = require("../controller/AuthorController");
 const AdminMiddleware = require("../middleware/AdminMiddleware");
+const InboxController = require("../controller/InboxController");
 
 
 const router = express.Router();
@@ -54,5 +55,10 @@ router.delete('/deleteQuote/:id',AuthMiddleware, QuoteController.deleteQuote);
 router.get('/banner-quote', QuoteController.quoteListForBanner);
 router.get('/popular-quote', QuoteController.popularQuotes);
 router.get('/quoteByCategory/:id', QuoteController.quoteByCategory);
+
+
+// Inbox
+router.post('/create-message', InboxController.createInbox);
+router.get('/inbox', AuthMiddleware, InboxController.getInbox);
 
 module.exports = router;

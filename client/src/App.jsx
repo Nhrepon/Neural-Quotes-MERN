@@ -9,7 +9,6 @@ import {isLogin} from "./utility/Utility.js";
 import NotFoundPage from "./page/NotFoundPage.jsx";
 import AboutPage from "./page/AboutPage.jsx";
 import ContactPage from "./page/ContactPage.jsx";
-import BlogPage from "./page/BlogPage.jsx";
 import SinglePage from "./page/SinglePage.jsx";
 import UserPage from "./dashboard/page/UserPage.jsx";
 import CategoryPage from "./dashboard/page/CategoryPage.jsx";
@@ -17,6 +16,8 @@ import QuotesPage from "./dashboard/page/QuotesPage.jsx";
 import AuthorPage from "./dashboard/page/AuthorPage.jsx";
 import QuotePage from "./page/QuotePage.jsx";
 import SingleQuotePage from "./page/SingleQuotePage.jsx";
+import PrivacyPolicyPage from "./page/PrivacyPolicyPage.jsx";
+import TermsAndConditionPage from "./page/TermsAndConditionPage.jsx";
 
 
 
@@ -27,13 +28,15 @@ const App = () => {
         {path:'/', element:<HomePage/>},
         {path:'/about', element:<AboutPage/>},
         {path:'/contact', element:<ContactPage/>},
-        {path:'/blogs', element:<BlogPage/>},
         {path:'/quote', element:<QuotePage/>},
         {path:'/quote/:id', element:<SingleQuotePage/>},
         {path:'/login', element:<LoginPage/>},
         {path:"/registration",element:<RegistrationPage/>},
 
         {path:"/details/:id",element:<SinglePage/>},
+
+        {path:"/privacy-policy",element:<PrivacyPolicyPage/>},
+        {path:"/terms-and-conditions",element:<TermsAndConditionPage/>},
 
         {path:"*", element:<NotFoundPage/>},
     ]

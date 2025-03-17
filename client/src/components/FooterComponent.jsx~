@@ -54,23 +54,13 @@ const FooterComponent = () => {
                       Blog
                     </Link>
                   </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/privacy-policy">
-                      Privacy Policy
-                    </Link>
-                  </li>
-                  <li className="nav-item">
-                    <Link className="nav-link" to="/terms-and-conditions">
-                      Terms and Conditions
-                    </Link>
-                  </li>
                 </ul>
               </div>
               <div className="col-md-4">
                 <h4>News letter</h4>
                 <hr/>
                 <div className="row">
-                <div className="col-12">
+                  <div className="col-12">
                     <form>
                       <input
                           type="email"

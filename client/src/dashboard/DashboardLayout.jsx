@@ -14,7 +14,7 @@ const DashboardLayout = (props) => {
                     <div className="col-2 col-sm-3 col-md-2 bg-success position-fixed clearfix">
                         <DashboardSidebar/>
                     </div>
-                    <div className="col-10 col-sm-9 col-md-10" style={{marginLeft:"17%"}}>
+                    <div className="col-10 col-sm-9 col-md-10 my-3" style={{marginLeft:"17%"}}>
                         {props.children}
                     </div>
                 </div>

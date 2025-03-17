@@ -1,0 +1,13 @@
+const mongoose = require('mongoose');
+
+const databaseSchema = mongoose.Schema({
+    name:{type: String, required: true},
+    email:{type: mongoose.Schema.Types.ObjectId, ref: 'UserModel', index: true, required: true},
+    mobile:{type: mongoose.Schema.Types.ObjectId, ref: 'QuoteModel', index: true, required: true},
+    message:{type: String, required: true},
+    isRead:{type: Boolean, default: false},
+    isDeleted:{type: Boolean, default: false},
+}, {timestamps: true, versionKey: false});
+databaseSchema.index({updatedAt:1});
+const InboxModel = mongoose.model("inbox", databaseSchema);
+module.exports = InboxModel;

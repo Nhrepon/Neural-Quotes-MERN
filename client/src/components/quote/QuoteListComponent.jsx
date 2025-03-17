@@ -1,4 +1,4 @@
-import {useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 
 import QuoteStore from "../../dashboard/store/QuoteStore.js";
 import {Link} from "react-router-dom";
@@ -9,7 +9,8 @@ const QuoteListComponent = ({data}) => {
     const [perPage, setPerPage] = useState(10);
     const [status, setStatus] = useState("published");
 
-    const {quoteList, getQuoteList}=QuoteStore();
+    const {quoteList, getQuoteList,totalQuote}=QuoteStore();
+
     useEffect(()=>{
         (async ()=>{
             await getQuoteList(pageNo, perPage, status);
@@ -21,16 +22,37 @@ const QuoteListComponent = ({data}) => {
     }
 
 
+    const nextPage = async ()=>{
+        await getQuoteList(pageNo+1, perPage, status);
+        setPageNo(pageNo+1);
+    }
+    const prevPage = async ()=>{
+        await getQuoteList(pageNo-1, perPage, status);
+        setPageNo(pageNo-1);
+    }
+
+
     return (
-        <div className="container">
+        <div className="container my-5">
             <div className="row">
+                <div className="d-flex flex-row justify-content-between align-items-center my-2">
+                    <h2 className="fs-4 fw-bold">Quote list</h2>
+                    <div className="d-flex flex-row gap-3 justify-content-center align-items-center">
+                        <button onClick={prevPage} disabled={pageNo === 1} className="btn btn-success">Prev</button>
+                        <span className="fs-5">{pageNo}</span>
+                        <button onClick={nextPage} disabled={pageNo === Math.ceil(totalQuote / perPage)}
+                                className="btn btn-success">Next
+                        </button>
+                    </div>
+                </div>
+                <hr/>
                 {quoteList && quoteList.length > 0 && quoteList.map((item, index) => {
                     return (
-                        <div className="col-12 d-flex flex-wrap" key={index}>
-                            <div className="card shadow w-100 my-2">
+                        <div className="col-sm-6 d-flex flex-wrap justify-content-center" key={index}>
+                            <div className="card shadow w-100 my-3">
                                 <Link onClick={reload} to={"/quote/" + item._id} className="text-black">
                                     <div className="card-body d-flex flex-column justify-content-center">
-                                        <h2 className="fs-5 card-title">"{item.quote}"</h2>
+                                        <h5 className="card-title">"{item.quote}"</h5>
                                         <p className="card-text text-end">-{item.author['name']}</p>
                                     </div>
                                 </Link>

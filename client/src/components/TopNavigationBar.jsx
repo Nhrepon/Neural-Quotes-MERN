@@ -4,6 +4,7 @@ import $ from "jquery";
 import {isLogin} from "../utility/Utility.js";
 import toast from "react-hot-toast";
 import UserStore from "../store/UserStore.js";
+import {appName} from "../../config.js";
 
 
 
@@ -38,7 +39,6 @@ const TopNavigationBar = () => {
 
     const navItem = [
         {to: '/', title: 'Home'},
-        {to: '/blogs', title: 'Blog'},
         {to: '/quote', title: 'Quotes'},
         {to: '/about', title: 'About'},
         {to: '/contact', title: 'Contact'},
@@ -61,7 +61,7 @@ const TopNavigationBar = () => {
                 <div className="row">
                     <nav className="navbar navbar-expand-md">
                         <Link className="navbar-brand  text-dark fw-bold fs-4" to="/">
-                            Neural HD wallpaper
+                            {appName}
                         </Link>
                         <button
                             className="navbar-toggler"
@@ -106,7 +106,7 @@ const TopNavigationBar = () => {
                                                         <li><Link className="dropdown-item"
                                                                   to="/dashboard">Dashboard</Link></li>
                                                         <li><Link className="dropdown-item"
-                                                                  to="/profile">Profile</Link></li>
+                                                                  to="/user">Profile</Link></li>
                                                         <li>
                                                             <hr className="dropdown-divider"/>
                                                         </li>
