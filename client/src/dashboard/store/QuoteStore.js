@@ -23,9 +23,9 @@ const QuoteStore = create((set)=>({
     },
     quoteList:null,
     totalQuote:null,
-    getQuoteList:async (pageNo, perPage, status)=>{
+    getQuoteList:async (pageNo, perPage, status, filter)=>{
         try{
-            const res =await axios.get(`/api/quoteList?pageNo=${pageNo}&perPage=${perPage}&status=${status}`);
+            const res =await axios.get(`/api/quoteList?pageNo=${pageNo}&perPage=${perPage}&status=${status}&filter=${filter}`);
             set({quoteList: res.data['data']});
             set({totalQuote: res.data['total']});
             return res.data["status"] === "success";

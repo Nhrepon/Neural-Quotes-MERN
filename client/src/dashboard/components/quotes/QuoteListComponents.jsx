@@ -17,6 +17,7 @@ const QuoteListComponents = () => {
     const [pageNo, setPageNo] = useState(1);
     const [perPage, setPerPage] = useState(10);
     const [status, setStatus] = useState("published");
+    const [filter, setFilter] = useState("DESC");
 
     const statusData = [
         {text:"Published", value:"published"},
@@ -33,7 +34,7 @@ const QuoteListComponents = () => {
             if (!authorList) {
                 await getAuthorList();
             }
-            await getQuoteList(pageNo, perPage, status);
+            await getQuoteList(pageNo, perPage, status, filter);
         })()
     }, []);
 
@@ -48,7 +49,7 @@ const QuoteListComponents = () => {
         } else {
             const res = await createQuote(quoteForm);
             if (res.status === "success") {
-                await getQuoteList(pageNo, perPage, status);
+                await getQuoteList(pageNo, perPage, status,filter);
                 toast.success("Quote created successfully.");
                 quoteForm.quote = "";
                 quoteForm.categoryId = "";
@@ -84,8 +85,14 @@ const QuoteListComponents = () => {
     const handleOnChange = async (event) => {
         const selectedPerPage = parseInt(event.target.value);
         setPerPage(selectedPerPage);
-        await getQuoteList(1, selectedPerPage, status);
+        await getQuoteList(1, selectedPerPage, status,filter);
     };
+
+    const handleFilter = async (event) => {
+        setFilter(event.target.value);
+        await getQuoteList(1, perPage, status, event.target.value);
+    };
+
 
     return (
         <div className={"container"}>
@@ -173,7 +180,7 @@ const QuoteListComponents = () => {
                                 statusData && statusData.map((item, i) => {
                                     return (
                                         <button value={item.value} onClick={async () => {
-                                            await getQuoteList(pageNo, perPage, item.value);
+                                            await getQuoteList(pageNo, perPage, item.value,"DESC");
                                             setStatus(item.value);
                                         }}
                                                 className={item.value === "cancel" ? "btn btn-danger rounded-0" : "btn btn-success rounded-0"}>{item.text}</button>
@@ -181,7 +188,15 @@ const QuoteListComponents = () => {
                                 })
                             }
                         </div>
-                        <div>
+                        <div className="d-flex flex-row gap-2">
+                            <div className="form-group">
+                                <select onChange={(e) => handleFilter(e)} value={filter}
+                                        className="form-select form-control">
+                                    <option value="ASC">Ascending</option>
+                                    <option value="DESC">Descending</option>
+
+                                </select>
+                            </div>
                             <div className="form-group">
                                 <select onChange={(e) => handleOnChange(e)} value={perPage.toString()}
                                         className="form-select form-control">
@@ -191,6 +206,7 @@ const QuoteListComponents = () => {
                                     <option value="100">100 per page</option>
                                 </select>
                             </div>
+
                         </div>
                     </div>
                     {
@@ -214,14 +230,14 @@ const QuoteListComponents = () => {
                                         return (
                                             <tr>
                                                 <td>{i + 1}</td>
-                                                <td>{truncateText(item.quote, 20)}</td>
+                                                <td>{truncateText(item.quote, 40)}</td>
                                                 <td>{item.category["categoryName"]}</td>
                                                 <td>{truncateText(item.author["name"], 20)}</td>
                                                 <td>{item.status}</td>
                                                 <td>{truncateText(item.user["userName"], 10)}</td>
                                                 <td>
                                                     <div className={"d-flex text-center"}>
-                                                        <UpdateQuoteComponent data={item}/>
+                                                        <UpdateQuoteComponent data={item} filter={filter}/>
                                                         {/*<button className="btn text-success border-0">*/}
                                                         {/*    <i className="bi bi-pencil-fill"></i>*/}
                                                         {/*</button>*/}

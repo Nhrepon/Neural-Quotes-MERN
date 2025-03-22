@@ -104,7 +104,7 @@ exports.quoteList = async (req, res)=>{
                         joinWithMeta,
                         unWindMeta,
                         projection,
-                        {$sort:{ updatedAt: filter === "ASC" ? 1 : -1 }},
+                        {$sort:{ [filter === "ASC" ? "updatedAt:1" : "updatedAt:-1"]}},
                         {$skip:skip},
                         {$limit:perPage},
                     ]
