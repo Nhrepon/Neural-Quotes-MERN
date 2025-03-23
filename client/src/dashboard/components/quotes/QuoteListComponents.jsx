@@ -180,7 +180,7 @@ const QuoteListComponents = () => {
                                 statusData && statusData.map((item, i) => {
                                     return (
                                         <button value={item.value} onClick={async () => {
-                                            await getQuoteList(pageNo, perPage, item.value,"DESC");
+                                            await getQuoteList(pageNo, perPage, item.value,filter);
                                             setStatus(item.value);
                                         }}
                                                 className={item.value === "cancel" ? "btn btn-danger rounded-0" : "btn btn-success rounded-0"}>{item.text}</button>
@@ -190,7 +190,7 @@ const QuoteListComponents = () => {
                         </div>
                         <div className="d-flex flex-row gap-2">
                             <div className="form-group">
-                                <select onChange={(e) => handleFilter(e)} value={filter}
+                                <select id="filter" onChange={(e) => handleFilter(e)} value={filter}
                                         className="form-select form-control">
                                     <option value="ASC">Ascending</option>
                                     <option value="DESC">Descending</option>

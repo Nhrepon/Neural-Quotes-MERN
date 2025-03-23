@@ -27,9 +27,9 @@ exports.createCategory = async (req, res)=> {
 
 exports.categoryList = async (req, res)=>{
     try{
-        let pageNo = Number(req.params.pageNo);
-        let perPage = Number(req.params.perPage);
-        let keyword = req.params.keyword;
+        let pageNo = Number(req.query.pageNo) || 1;
+        let perPage = Number(req.query.perPage) || 10;
+        let keyword = req.query.keyword || "0";
         let skip = (pageNo-1)*perPage;
 
         const joinWithUser = {$lookup:{
@@ -157,6 +157,9 @@ exports.deleteCategory = async (req, res)=>{
 
 exports.categoryWithQuotes = async (req, res)=>{
     try{
+        let pageNo = Number(req.query.pageNo) || 1;
+        let perPage = Number(req.query.perPage) || 10;
+        let skip = (pageNo-1)*perPage;
         const categoriesWithQuotes = await CategoryModel.aggregate([
             {
                 $match: {
@@ -210,6 +213,10 @@ exports.categoryWithQuotes = async (req, res)=>{
                     quoteCount: {$size: "$quotes"} //add a quote count property
                 },
             },
+            {$sort:{quoteCount:-1}},
+            {$skip:skip},
+            {$limit:perPage},
+
         ]);
         return res.json({status:"success", data:categoriesWithQuotes});
     }catch (e) {

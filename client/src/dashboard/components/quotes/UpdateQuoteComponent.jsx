@@ -26,6 +26,10 @@ const UpdateQuoteComponent = (props) => {
                 status: props.data.status,
             });
         }
+        (async ()=>{
+            await getCategoryList(1, 1000, 0);
+            await getAuthorList(1, 10000);
+        })()
     }, [props.data]);
 
     const handleChange = (field, value) => {

@@ -39,7 +39,7 @@ router.get('/categoryWithQuotes', CategoryController.categoryWithQuotes);
 
 // Author route
 router.post('/createAuthor', AuthMiddleware, AuthorController.createAuthor);
-router.get('/authorList', AuthorController.authorList);
+router.get('/authorList', AuthMiddleware, AuthorController.authorList);
 router.put('/updateAuthor/:id', AuthMiddleware, AuthorController.updateAuthor);
 router.delete('/deleteAuthor/:id', AuthMiddleware, AuthorController.deleteAuthor);
 

@@ -37,6 +37,7 @@ exports.authorList = async (req, res) => {
                 'nationality':1,
                 'createdAt':1,
                 'updatedAt':1,
+                quoteCount: {$size: "$quotes"}
             }}
         //const data = await AuthorModel.find().sort({updatedAt: -1});
         const data = await AuthorModel.aggregate([
@@ -44,8 +45,38 @@ exports.authorList = async (req, res) => {
                 $facet:{
                     total:[{$count:"total"}],
                     data:[
+                        {$match:{name:{$ne:"Unknown"}}},
+                        {
+                            $lookup: {
+                                from: "quotes",
+                                let: { authorId: "$_id" },
+                                pipeline: [
+                                    {
+                                        $match: {
+                                            $expr: { $eq: ["$authorId", "$$authorId"] },
+                                            status: "published", // Filter quotes by status
+                                        },
+                                    },
+                                    {
+                                        $project: {
+                                            _id: 1,
+                                            quote: 1,
+                                            // Add other quote fields you want to include
+                                        },
+                                    },
+                                ],
+                                as: "quotes",
+                            },
+                        },
+                        {
+                            $match: {
+                                "quotes.0": { $exists: true }, // Filter categories with at least one quote
+                            },
+                        },
+
+
                         projection,
-                        {$sort:{ updatedAt : -1 }},
+                        {$sort:{ quoteCount : -1 }},
                         {$skip:skip},
                         {$limit:perPage},
                     ]

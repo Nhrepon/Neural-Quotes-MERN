@@ -18,7 +18,7 @@ const QuoteByCategoryComponents = () => {
 
     useEffect(()=>{
         (async ()=>{
-            await getCategoryWithQuotes();
+            await getCategoryWithQuotes(pageNo, perPage);
         })()
     },[]);
 
@@ -52,6 +52,7 @@ const QuoteByCategoryComponents = () => {
     const handleOnChange = async (event) => {
         const selectedPerPage = parseInt(event.target.value);
         setPerPage(selectedPerPage);
+        setPageNo(1);
         await getQuoteListByCategory(cateId, pageNo, selectedPerPage);
     };
 

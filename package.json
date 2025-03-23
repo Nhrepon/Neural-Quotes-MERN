@@ -6,13 +6,15 @@
   "scripts": {
     "start": "nodemon index.js",
     "st": "node --watch index.js",
+    "bs": "bun --watch index.js",
+    "bh": "bun --hot index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "axios": "^1.7.7",
+    "axios": "^1.8.4",
     "body-parser": "^1.20.3",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",

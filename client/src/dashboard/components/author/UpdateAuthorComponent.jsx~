@@ -37,7 +37,7 @@ const UpdateAuthorComponent = (props) => {
         const res = await updateAuthor(props.data._id, form);
         if (res.status === "success") {
             await modalHide(`update-${props.data._id}`);
-            await getAuthorList(1, 10);
+            await getAuthorList(1, undefined);
             toast.success("Author updated successfully!");
 
         } else {

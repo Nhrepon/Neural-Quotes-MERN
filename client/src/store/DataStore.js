@@ -6,8 +6,8 @@ import toast from "react-hot-toast";
 const DataStore = create((set)=>({
     categoryListWithQuotes:[],
     categoryId:null,
-    getCategoryWithQuotes: async ()=>{
-        const res = await axios.get("/api/categoryWithQuotes");
+    getCategoryWithQuotes: async (pageNo, perPage)=>{
+        const res = await axios.get(`/api/categoryWithQuotes?pageNo=${pageNo}&perPage=${perPage}`);
         if(res.data.status === "success"){
             set({categoryListWithQuotes:res.data.data});
             set({categoryId:res.data.data[0]._id});

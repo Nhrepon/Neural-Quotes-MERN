@@ -58,10 +58,14 @@ const AuthorListComponents = () => {
                         <CreateAuthorComponent/>
                     </div>
                     <div className="position-absolute end-0 me-3 d-flex flex-row align-items-center gap-3">
-                        <div className="d-flex flex-row gap-3">
-                            <i onClick={previousPage} className={pageNo === 1?"d-none":"bi bi-chevron-double-left fw-bold"}></i>
-                            <span>{pageNo}</span>
-                            <i onClick={nextPage} className={pageNo === totalPage-1?"d-none":"bi bi-chevron-double-right fw-bold"}></i>
+                        <div className="d-flex flex-row gap-3 align-items-center">
+                            <button onClick={previousPage} disabled={pageNo === 1}
+                                    className="btn btn-success">Prev
+                            </button>
+                            <span className="fs-5">{pageNo}</span>
+                            <button onClick={nextPage} disabled={pageNo === Math.ceil(totalAuthor / perPage)}
+                                    className="btn btn-success">Next
+                            </button>
                         </div>
                         <div className="form-group">
                             <select onChange={(e) => handleOnChange(e)} value={perPage.toString()}
