@@ -18,7 +18,7 @@ const QuoteByCategoryComponents = () => {
 
     useEffect(()=>{
         (async ()=>{
-            await getCategoryWithQuotes(pageNo, perPage);
+            await getCategoryWithQuotes(pageNo, 100);
         })()
     },[]);
 
