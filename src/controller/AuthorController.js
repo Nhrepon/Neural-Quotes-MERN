@@ -29,7 +29,10 @@ exports.authorList = async (req, res) => {
         let pageNo = Number(req.query.pageNo) || 1;
         let perPage = Number(req.query.perPage) || 10;
         let skip = (pageNo-1)*perPage;
-        const projection = {$project:{
+        const showAllAuthors = req.query.all === 'true';
+
+        const matchStage = {$match:{name:{$ne:"Unknown"}}};
+        const projection = {
                 'name':1,
                 'bio':1,
                 'profilePicture':1,
@@ -37,55 +40,66 @@ exports.authorList = async (req, res) => {
                 'nationality':1,
                 'createdAt':1,
                 'updatedAt':1,
-                quoteCount: {$size: "$quotes"}
-            }}
+                quoteCount: 1
+            }
+
+        const allAuthors = [
+            matchStage,
+            {$project:projection},
+            {$sort:{ quoteCount : -1 }},
+            {$skip:skip},
+            {$limit:perPage},
+        ]
+        const authorWithQuotes = [
+            matchStage,
+            {
+                $lookup: {
+                    from: "quotes",
+                    let: { authorId: "$_id" },
+                    pipeline: [
+                        {
+                            $match: {
+                                $expr: { $eq: ["$authorId", "$$authorId"] },
+                                status: "published", // Filter quotes by status
+                            },
+                        },
+                        {
+                            $project: {
+                                _id: 1,
+                                quote: 1,
+                                // Add other quote fields you want to include
+                            },
+                        },
+                    ],
+                    as: "quotes",
+                },
+            },
+            {
+                $match: {
+                    "quotes.0": { $exists: true }, // Filter categories with at least one quote
+                },
+            },
+
+            {$project:projection},
+            {$sort:{ quoteCount : -1 }},
+            {$skip:skip},
+            {$limit:perPage},
+        ];
         //const data = await AuthorModel.find().sort({updatedAt: -1});
         const data = await AuthorModel.aggregate([
             {
                 $facet:{
                     total:[{$count:"total"}],
-                    data:[
-                        {$match:{name:{$ne:"Unknown"}}},
-                        {
-                            $lookup: {
-                                from: "quotes",
-                                let: { authorId: "$_id" },
-                                pipeline: [
-                                    {
-                                        $match: {
-                                            $expr: { $eq: ["$authorId", "$$authorId"] },
-                                            status: "published", // Filter quotes by status
-                                        },
-                                    },
-                                    {
-                                        $project: {
-                                            _id: 1,
-                                            quote: 1,
-                                            // Add other quote fields you want to include
-                                        },
-                                    },
-                                ],
-                                as: "quotes",
-                            },
-                        },
-                        {
-                            $match: {
-                                "quotes.0": { $exists: true }, // Filter categories with at least one quote
-                            },
-                        },
-
-
-                        projection,
-                        {$sort:{ quoteCount : -1 }},
-                        {$skip:skip},
-                        {$limit:perPage},
-                    ]
+                    data: showAllAuthors ? allAuthors : authorWithQuotes,
                 }
             }
         ]);
 
+        const total = data[0]?.total[0]?.total || 0;
+        const authors = data[0]?.data || [];
         //res.json({status:"success", data: data});
-        res.json({status:"success", total:data[0].total[0].total, load:data[0].data.length, data:data[0].data});
+        //res.json({status:"success", total:data[0].total[0].total, load:data[0].data.length, data:data[0].data});
+        res.json({status:"success", total:total, load:authors.length, data:authors});
     }catch (e) {
         res.json({status:"error", message:e.message});
     }
