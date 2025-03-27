@@ -15,7 +15,7 @@ const AuthorListComponents = () => {
 
     useEffect(()=>{
         (async ()=>{
-            await getAuthorList(pageNo, perPage);
+            await getAuthorList(pageNo, perPage, true);
         })()
     }, []);
 
@@ -52,12 +52,12 @@ const AuthorListComponents = () => {
     return (
         <div className="container">
             <div className="row">
-                <div className="col-12 d-flex justify-content-center position-relative mt-3">
-                    <h2>Author</h2>
-                    <div className="position-absolute start-0 ms-2 mt-2">
+                <div className="col-12 d-flex flex-row align-items-center justify-content-between gap-3 mt-3">
+                    <div className="">
                         <CreateAuthorComponent/>
                     </div>
-                    <div className="position-absolute end-0 me-3 d-flex flex-row align-items-center gap-3">
+                    <h2>Author</h2>
+                    <div className="d-flex flex-row align-items-center gap-3">
                         <div className="d-flex flex-row gap-3 align-items-center">
                             <button onClick={previousPage} disabled={pageNo === 1}
                                     className="btn btn-success">Prev

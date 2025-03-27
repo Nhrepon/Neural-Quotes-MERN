@@ -3,11 +3,11 @@ import CategoryStore from "../../store/CategoryStore.js";
 import AuthorStore from "../../store/AuthorStore.js";
 import QuoteStore from "../../store/QuoteStore.js";
 import toast from "react-hot-toast";
-import {DeleteAlert, isAdmin, modalHide, truncateText} from "../../../utility/Utility.js";
+import {DeleteAlert, isAdmin, truncateText} from "../../../utility/Utility.js";
 import UpdateQuoteComponent from "./UpdateQuoteComponent.jsx";
 import CreateAuthorComponent from "../author/CreateAuthorComponent.jsx";
 import CreateCategoryComponent from "../category/CreateCategoryComponent.jsx";
-import NotFoundComponent from "../../../components/notFound/NotFoundComponent.jsx";
+import NoDataFoundComponent from "../../../components/notFound/NoDataFoundComponent.jsx";
 
 const QuoteListComponents = () => {
     const {getCategoryList, categoryList} = CategoryStore();
@@ -28,12 +28,18 @@ const QuoteListComponents = () => {
 
     useEffect(() => {
         (async () => {
-            if (!categoryList) {
-                await getCategoryList(1, 1000, 0);
-            }
-            if (!authorList) {
-                await getAuthorList();
-            }
+            categoryList === null && await getCategoryList(1, 1000, 0);
+        })()
+    }, [0]);
+
+    useEffect(() => {
+        (async () => {
+            authorList === null &&  await getAuthorList(1, 10000, true);
+        })()
+    }, [0]);
+
+    useEffect(() => {
+        (async () => {
             await getQuoteList(pageNo, perPage, status, filter);
         })()
     }, []);
@@ -179,7 +185,7 @@ const QuoteListComponents = () => {
                             {
                                 statusData && statusData.map((item, i) => {
                                     return (
-                                        <button value={item.value} onClick={async () => {
+                                        <button key={i} value={item.value} onClick={async () => {
                                             await getQuoteList(pageNo, perPage, item.value,filter);
                                             setStatus(item.value);
                                         }}
@@ -210,7 +216,7 @@ const QuoteListComponents = () => {
                         </div>
                     </div>
                     {
-                        quoteList == null ? <NotFoundComponent/> :
+                        quoteList == null ? <NoDataFoundComponent/> :
                             <table className={"table table-striped"}>
                                 <thead>
                                 <tr>
@@ -228,7 +234,7 @@ const QuoteListComponents = () => {
 
                                     quoteList && quoteList.map((item, i) => {
                                         return (
-                                            <tr>
+                                            <tr key={i}>
                                                 <td>{i + 1}</td>
                                                 <td>{truncateText(item.quote, 40)}</td>
                                                 <td>{item.category["categoryName"]}</td>

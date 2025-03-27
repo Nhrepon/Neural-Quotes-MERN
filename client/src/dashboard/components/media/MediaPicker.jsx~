@@ -67,11 +67,11 @@ const MediaPicker = ({onInputChange}) => {
                                 <div className="d-flex flex-row gap-3 align-items-center">
                                     <div className="d-flex flex-row gap-3 align-items-center bg-success rounded-1">
                                         <button onClick={prevPage} disabled={pageNo === 1}
-                                                className="btn btn-success rounded-start">Prev
+                                                className="btn btn-success rounded-0">Prev
                                         </button>
                                         <span className="text-light fs-5">{pageNo}</span>
                                         <button onClick={nextPage} disabled={pageNo === Math.ceil(totalFile / perPage)}
-                                                className="btn btn-success rounded-end">Next
+                                                className="btn btn-success rounded-0">Next
                                         </button>
                                     </div>
                                     <button type="button" className="p-2 bg-danger text-light btn btn-close" onClick={closeModal}></button>
