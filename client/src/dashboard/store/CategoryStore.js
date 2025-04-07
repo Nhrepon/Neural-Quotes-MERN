@@ -25,7 +25,7 @@ const CategoryStore = create((set)=>({
     totalCategory:0,
     getCategoryList:async (pageNo, perPage, keyword)=>{
         try{
-            set({categoryList: null});
+            //set({categoryList: null});
             const res =await axios.get(`/api/categoryList?pageNo=${pageNo}&perPage=${perPage}&keyword=${keyword}`);
             set({categoryList: res.data['data']});
             set({totalCategory: res.data['total']});

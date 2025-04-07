@@ -6,7 +6,7 @@
   "scripts": {
     "start": "nodemon index.js",
     "st": "node --watch index.js",
-    "bs": "bun --watch index.js",
+    "bw": "bun --watch index.js",
     "bh": "bun --hot index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

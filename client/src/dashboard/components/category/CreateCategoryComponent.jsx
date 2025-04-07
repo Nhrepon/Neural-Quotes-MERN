@@ -11,7 +11,9 @@ const CreateCategoryComponent = () => {
 
     useEffect(()=>{
         (async ()=>{
-            categoryList === null && await getCategoryList(1, 1000, 0);
+            if(categoryList === null || categoryList.length === 0){
+                await getCategoryList(1, 1000, 0);
+            }
         })()
     },[])
 

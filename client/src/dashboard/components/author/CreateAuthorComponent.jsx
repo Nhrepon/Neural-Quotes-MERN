@@ -15,7 +15,7 @@ const CreateAuthorComponent = () => {
             const res = await createAuthor(authorForm);
             if (res.status === "success") {
                 toast.success("Category successfully.");
-                await getAuthorList();
+                await getAuthorList(1, 10, "yes");
                 await modalHide("create");
                 authorForm.name = "";
                 authorForm.bio = "";

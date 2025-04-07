@@ -29,7 +29,7 @@ exports.authorList = async (req, res) => {
         let pageNo = Number(req.query.pageNo) || 1;
         let perPage = Number(req.query.perPage) || 10;
         let skip = (pageNo-1)*perPage;
-        const showAllAuthors = req.query.all === 'true';
+        const showAllAuthors = req.query.allData === 'yes';
 
         const matchStage = {$match:{name:{$ne:"Unknown"}}};
         const projection = {

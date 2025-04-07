@@ -14,6 +14,7 @@ const QuoteListComponents = () => {
     const {getAuthorList, authorList} = AuthorStore();
     const {quoteFormOnChange, quoteForm, createQuote, quoteList, getQuoteList, deleteQuote, updateQuote} = QuoteStore();
 
+
     const [pageNo, setPageNo] = useState(1);
     const [perPage, setPerPage] = useState(10);
     const [status, setStatus] = useState("published");
@@ -26,23 +27,14 @@ const QuoteListComponents = () => {
         {text:"Cancel", value:"cancel"},
     ]
 
-    useEffect(() => {
-        (async () => {
-            categoryList === null && await getCategoryList(1, 1000, 0);
-        })()
-    }, [0]);
 
-    useEffect(() => {
-        (async () => {
-            authorList === null &&  await getAuthorList(1, 10000, true);
-        })()
-    }, [0]);
-
-    useEffect(() => {
-        (async () => {
+    useEffect(()=>{
+        (async ()=>{
+            categoryList === null || categoryList.length === 0 && await getCategoryList(1, 1000, 0);
+            await getAuthorList(1, 10000, "yes");
             await getQuoteList(pageNo, perPage, status, filter);
         })()
-    }, []);
+    },[]);
 
 
     const onSubmit = async () => {
@@ -78,7 +70,7 @@ const QuoteListComponents = () => {
         if (await DeleteAlert()) {
             const res = await deleteQuote(id);
             if (res.status === "success") {
-                await getQuoteList(pageNo, perPage, status);
+                await getQuoteList(pageNo, perPage, status, filter);
                 toast.success("Quote deleted successfully!");
             } else {
                 toast.error(res.message);
@@ -126,7 +118,7 @@ const QuoteListComponents = () => {
                                 <select id="category" value={quoteForm.categoryId} onChange={(e) => {
                                     quoteFormOnChange("categoryId", e.target.value)
                                 }} className="form-select" aria-label="Default select">
-                                    <option selected>Select category</option>
+                                    <option defaultValue>Select category</option>
                                     {
                                         categoryList && categoryList.map((item, i) => {
                                             return (
@@ -146,7 +138,7 @@ const QuoteListComponents = () => {
                                 <select id="author" value={quoteForm.authorId} onChange={(e) => {
                                     quoteFormOnChange("authorId", e.target.value)
                                 }} className="form-select" aria-label="Default select">
-                                    <option selected>Select author</option>
+                                    <option defaultValue>Select author</option>
                                     {
                                         authorList && authorList.map((item, i) => {
                                             return (
@@ -186,10 +178,10 @@ const QuoteListComponents = () => {
                                 statusData && statusData.map((item, i) => {
                                     return (
                                         <button key={i} value={item.value} onClick={async () => {
-                                            await getQuoteList(pageNo, perPage, item.value,filter);
+                                            await getQuoteList(pageNo, perPage, item.value, filter);
                                             setStatus(item.value);
                                         }}
-                                                className={item.value === "cancel" ? "btn btn-danger rounded-0" : "btn btn-success rounded-0"}>{item.text}</button>
+                                        className={item.value === "cancel" ? "btn btn-danger rounded-0" : "btn btn-success rounded-0"}>{item.text}</button>
                                     )
                                 })
                             }
@@ -200,7 +192,6 @@ const QuoteListComponents = () => {
                                         className="form-select form-control">
                                     <option value="ASC">Ascending</option>
                                     <option value="DESC">Descending</option>
-
                                 </select>
                             </div>
                             <div className="form-group">
@@ -244,10 +235,6 @@ const QuoteListComponents = () => {
                                                 <td>
                                                     <div className={"d-flex text-center"}>
                                                         <UpdateQuoteComponent data={item} filter={filter}/>
-                                                        {/*<button className="btn text-success border-0">*/}
-                                                        {/*    <i className="bi bi-pencil-fill"></i>*/}
-                                                        {/*</button>*/}
-
                                                         <button onClick={async () => {
                                                             await deleteItem(item["_id"])
                                                         }} className="btn text-danger border-0">

@@ -27,8 +27,9 @@ const UpdateQuoteComponent = (props) => {
             });
         }
         (async ()=>{
-            await getCategoryList(1, 1000, 0);
-            await getAuthorList(1, 10000, true);
+            categoryList === null || categoryList.length === 0 && await getCategoryList(1, 1000, 0);
+            authorList === null || authorList.length === 0 && await getAuthorList(1, 10000, "yes");
+
         })()
     }, [props.data]);
 

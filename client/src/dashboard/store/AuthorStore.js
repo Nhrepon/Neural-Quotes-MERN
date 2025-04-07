@@ -21,18 +21,21 @@ const AuthorStore = create((set)=>({
             return {status:"error", message:e.message};
         }
     },
+
     authorList:null,
     totalAuthor:null,
-    getAuthorList:async (pageNo, perPage, all)=>{
+    getAuthorList:async (pageNo, perPage, allData)=>{
         try{
-            const res =await axios.get(`/api/authorList?pageNo=${pageNo}&perPage=${perPage}&all=${all}`);
-            set({authorList: res.data['data']});
-            set({totalAuthor: res.data['total']});
+            const res =await axios.get(`/api/authorList?pageNo=${pageNo}&perPage=${perPage}&allData=${allData}`);
+            if(res.data.status === "success" && res.data.data){
+                set({authorList: res.data['data'], totalAuthor: res.data['total']});
+            }
             return res.data["status"] === "success";
         }catch (e) {
             return {status:"error", message:e.message};
         }
     },
+
     updateAuthor: async (id, postBody)=>{
         try{
             const res =await axios.put("/api/updateAuthor/"+id, postBody);

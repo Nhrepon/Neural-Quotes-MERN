@@ -15,7 +15,9 @@ const AuthorListComponents = () => {
 
     useEffect(()=>{
         (async ()=>{
-            await getAuthorList(pageNo, perPage, true);
+            if(authorList === null || authorList.length === 0){
+                await getAuthorList(pageNo, perPage, "no");
+            }
         })()
     }, []);
 
@@ -23,7 +25,7 @@ const AuthorListComponents = () => {
         if(await DeleteAlert()){
             const res = await deleteAuthor(id);
             if(res.status === "success"){
-                await getAuthorList();
+                await getAuthorList(pageNo, perPage, "no");
                 toast.success("Author deleted successfully!");
             }else {
                 toast.error(res.message);
@@ -36,17 +38,17 @@ const AuthorListComponents = () => {
     const handleOnChange = async (event) => {
         const selectedPerPage = parseInt(event.target.value);
         setPerPage(selectedPerPage);
-        await getAuthorList(1, selectedPerPage);
+        await getAuthorList(1, selectedPerPage, "no");
         setPageNo(1);
     };
 
     const nextPage = async ()=>{
+        await getAuthorList(pageNo+1, perPage, "no");
         setPageNo(pageNo+1);
-        await getAuthorList(pageNo, perPage);
     }
     const previousPage = async ()=>{
+        await getAuthorList(pageNo-1, perPage, "no");
         setPageNo(pageNo-1);
-        await getAuthorList(pageNo, perPage);
     }
 
     return (
