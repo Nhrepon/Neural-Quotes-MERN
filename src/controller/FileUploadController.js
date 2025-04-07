@@ -206,6 +206,8 @@ exports.fileLoad = async (req, res)=>{
                 'filePath':1,
                 'category.categoryName':1,
                 'user.userName':1,
+            'categoryId':1,
+            'userId':1,
                 'createdAt':1,
                 'updatedAt':1,
             }}
