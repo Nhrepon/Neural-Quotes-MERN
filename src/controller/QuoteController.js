@@ -29,14 +29,14 @@ exports.createQuote = async (req, res) => {
 
 exports.quoteList = async (req, res)=>{
     try{
-
         let pageNo = Number(req.query.pageNo) || 1;
         let perPage = Number(req.query.perPage) || 10;
         let skip = (pageNo-1)*perPage;
         let status = req.query.status || "published";
         let filter = req.query.filter || "DESC";
+        let authorId = req.query.authorId != null ? new ObjectId(req.query.authorId) : null;
 
-        const matchStage = {$match: {status:status}};
+        const matchStage = authorId != null ? {$match: {status:status, authorId:authorId}} : {$match: {status:status}};
 
         const joinWithCategory = {$lookup:{
                 from: "categories",
@@ -255,8 +255,13 @@ exports.deleteQuote = async (req, res)=>{
         if(check.length === 0){
             return res.json({status:"fail", message:"You are not authorized to delete this quote"});
         }else {
-            const data = await QuoteModel.deleteOne(condition);
-            res.json({status:"success", data:data});
+            const [data, qMeta] = await Promise.all([
+                QuoteModel.deleteOne(condition),
+                QuoteMeta.deleteOne({quoteId: check[0]._id})
+            ]);
+            //const data = await QuoteModel.deleteOne(condition);
+            //const qMeta = await QuoteMeta.deleteOne({quoteId: check[0]._id});
+            res.json({status:"success", data:data, quoteMeta:qMeta});
         }
 
 

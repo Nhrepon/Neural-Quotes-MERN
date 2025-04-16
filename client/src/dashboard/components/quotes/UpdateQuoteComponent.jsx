@@ -44,7 +44,7 @@ const UpdateQuoteComponent = (props) => {
         const res = await updateQuote(props.data._id, form);
         if (res.status === "success") {
             await modalHide(`update-${props.data._id}`);
-            await getQuoteList(1, 10, props.data.status, props.filter);
+            await getQuoteList(1, 10, props.data.status, props.filter, props.author);
             toast.success("Quote updated successfully!");
         } else {
             toast.error(res.message);

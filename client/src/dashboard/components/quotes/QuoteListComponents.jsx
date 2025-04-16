@@ -19,6 +19,7 @@ const QuoteListComponents = () => {
     const [perPage, setPerPage] = useState(10);
     const [status, setStatus] = useState("published");
     const [filter, setFilter] = useState("DESC");
+    const [author, setAuthor] = useState();
 
     const statusData = [
         {text:"Published", value:"published"},
@@ -32,7 +33,7 @@ const QuoteListComponents = () => {
         (async ()=>{
             categoryList === null || categoryList.length === 0 && await getCategoryList(1, 1000, 0);
             await getAuthorList(1, 10000, "yes");
-            await getQuoteList(pageNo, perPage, status, filter);
+            await getQuoteList(pageNo, perPage, status, filter, author);
         })()
     },[]);
 
@@ -47,7 +48,7 @@ const QuoteListComponents = () => {
         } else {
             const res = await createQuote(quoteForm);
             if (res.status === "success") {
-                await getQuoteList(pageNo, perPage, status,filter);
+                await getQuoteList(pageNo, perPage, status,filter, author);
                 toast.success("Quote created successfully.");
                 quoteForm.quote = "";
                 quoteForm.categoryId = "";
@@ -70,7 +71,7 @@ const QuoteListComponents = () => {
         if (await DeleteAlert()) {
             const res = await deleteQuote(id);
             if (res.status === "success") {
-                await getQuoteList(pageNo, perPage, status, filter);
+                await getQuoteList(pageNo, perPage, status, filter, author);
                 toast.success("Quote deleted successfully!");
             } else {
                 toast.error(res.message);
@@ -83,26 +84,37 @@ const QuoteListComponents = () => {
     const handleOnChange = async (event) => {
         const selectedPerPage = parseInt(event.target.value);
         setPerPage(selectedPerPage);
-        await getQuoteList(1, selectedPerPage, status,filter);
+        await getQuoteList(1, selectedPerPage, status,filter, author);
     };
 
     const handleFilter = async (event) => {
         setFilter(event.target.value);
-        await getQuoteList(1, perPage, status, event.target.value);
+        await getQuoteList(1, perPage, status, event.target.value, author);
     };
 
+    const handleAuthor = async (event)=>{
+        setAuthor(event.target.value);
+        await getQuoteList(1, perPage, status, filter, event.target.value);
+    }
+
+    const toggleNewQuote = ()=>{
+        const newQuote = document.getElementById("add_new_quote");
+        newQuote.classList.toggle("d-none");
+    }
 
     return (
         <div className={"container"}>
             <div className="row">
+                <div className="position-absolute"><button onClick={toggleNewQuote} id="new_quote" className="btn btn-success">Add New Quote</button></div>
                 <div className="col-12 mt-3">
                     <h2 className="text-center">Quotes</h2>
                 </div>
+
             </div>
             <hr/>
             <div className="row">
-                <div className="col-sm-4">
-                    <div className="card p-3 d-flex flex-column gap-2 shadow">
+                <div style={{transition: "opacity 0.3s ease, visibility 0.3s ease"}} id="add_new_quote" className="col-12 d-flex justify-content-center my-3 mb-5 d-none">
+                    <div className="card p-3 d-flex flex-column gap-2 shadow col-sm-6">
                         <div>
                             <h3 className="fs-4">Add new quote</h3>
                         </div>
@@ -171,14 +183,14 @@ const QuoteListComponents = () => {
                         <button onClick={onSubmit} className="btn btn-success">Add</button>
                     </div>
                 </div>
-                <div className="col-sm-8">
-                    <div className="shadow d-flex flex-row justify-content-between">
+                <div id="quote_list" className="col-12">
+                    <div style={{paddingBottom:2}} className="shadow-sm d-flex flex-row justify-content-between my-2">
                         <div className="">
                             {
                                 statusData && statusData.map((item, i) => {
                                     return (
                                         <button key={i} value={item.value} onClick={async () => {
-                                            await getQuoteList(pageNo, perPage, item.value, filter);
+                                            await getQuoteList(pageNo, perPage, item.value, filter, author);
                                             setStatus(item.value);
                                         }}
                                         className={item.value === "cancel" ? "btn btn-danger rounded-0" : "btn btn-success rounded-0"}>{item.text}</button>
@@ -187,6 +199,15 @@ const QuoteListComponents = () => {
                             }
                         </div>
                         <div className="d-flex flex-row gap-2">
+                            <div className="form-group">
+                                <select id="author" onChange={(e) => handleAuthor(e)} value={author}
+                                        className="form-select form-control">
+                                    <option value="">Select author</option>
+                                    {authorList && authorList.map((item, i)=>{
+                                        return (<option key={i} value={item._id}>{item.name}</option>);
+                                    })}
+                                </select>
+                            </div>
                             <div className="form-group">
                                 <select id="filter" onChange={(e) => handleFilter(e)} value={filter}
                                         className="form-select form-control">
@@ -227,14 +248,14 @@ const QuoteListComponents = () => {
                                         return (
                                             <tr key={i}>
                                                 <td>{i + 1}</td>
-                                                <td>{truncateText(item.quote, 40)}</td>
+                                                <td>{truncateText(item.quote, 120)}</td>
                                                 <td>{item.category["categoryName"]}</td>
                                                 <td>{truncateText(item.author["name"], 20)}</td>
                                                 <td>{item.status}</td>
                                                 <td>{truncateText(item.user["userName"], 10)}</td>
                                                 <td>
                                                     <div className={"d-flex text-center"}>
-                                                        <UpdateQuoteComponent data={item} filter={filter}/>
+                                                        <UpdateQuoteComponent data={item} filter={filter} author={author}/>
                                                         <button onClick={async () => {
                                                             await deleteItem(item["_id"])
                                                         }} className="btn text-danger border-0">
